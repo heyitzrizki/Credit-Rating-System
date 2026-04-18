@@ -1,0 +1,33 @@
+{
+  "final_model_name": "Tuned Hybrid XGBoost (TCN+Static, no SMOTE)",
+  "calibration_method": "Platt",
+  "benchmark_model": "Static-Only XGBoost",
+  "valid_roc_auc": 0.7268511835837612,
+  "test_roc_auc": 0.7289850415606159,
+  "valid_pr_auc": 0.2105544103668043,
+  "test_pr_auc": 0.22037243441282062,
+  "valid_brier_platt": 0.06936961129238411,
+  "test_brier_platt": 0.06838540407767522,
+  "risk_band_labels": [
+    "Very Low",
+    "Low",
+    "Medium",
+    "High",
+    "Very High"
+  ],
+  "decision_policy_band_based": {
+    "Very Low": "Approve",
+    "Low": "Approve",
+    "Medium": "Review",
+    "High": "Reject",
+    "Very High": "Reject"
+  },
+  "decision_policy_threshold_based": {
+    "Approve_if_pd_lt": 0.05,
+    "Review_if_pd_between": [
+      0.05,
+      0.15
+    ],
+    "Reject_if_pd_gte": 0.15
+  }
+}
