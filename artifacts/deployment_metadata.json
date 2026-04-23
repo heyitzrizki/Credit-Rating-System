@@ -1,0 +1,44 @@
+{
+  "final_model_name": "Tuned Hybrid XGBoost (TCN+Static, no SMOTE)",
+  "model_family": "Hybrid XGBoost with TCN-derived temporal embeddings",
+  "calibration_method": "Platt",
+  "benchmark_model": "Static-Only XGBoost",
+  "valid_roc_auc": 0.7245142549485887,
+  "test_roc_auc": 0.7266131691766516,
+  "valid_pr_auc": 0.2053229279470483,
+  "test_pr_auc": 0.22399128348263445,
+  "valid_brier_platt": 0.06956800388649258,
+  "test_brier_platt": 0.0684741039326142,
+  "credit_grade_labels": [
+    "AAA",
+    "AA",
+    "A",
+    "BBB",
+    "BB",
+    "B",
+    "C",
+    "D"
+  ],
+  "decision_policy_grade_based": {
+    "AAA": "Approve",
+    "AA": "Approve",
+    "A": "Approve",
+    "BBB": "Review",
+    "BB": "Review",
+    "B": "Reject",
+    "C": "Reject",
+    "D": "Reject"
+  },
+  "decision_policy_threshold_based": {
+    "Approve_if_pd_lt": 0.05,
+    "Review_if_pd_between": [
+      0.05,
+      0.15
+    ],
+    "Reject_if_pd_gte": 0.15
+  },
+  "intended_use": "Decision support for borrower rating, watchlist generation, and portfolio monitoring",
+  "usage_note": "Model output is decision-support only and should not replace analyst judgment",
+  "explanation_method": "SHAP (global and borrower-level local explanation)",
+  "model_version": "v1"
+}

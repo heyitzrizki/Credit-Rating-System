@@ -1,0 +1,152 @@
+feature_display,feature_group,mean_abs_shap
+Temporal Behavioral Pattern,Temporal Embedding,0.9838798
+External Risk Score 2,Static Application,0.43204704
+External Risk Score 3,Static Application,0.36140263
+External Risk Score 1,Static Application,0.16790466
+Days Since Last Phone Change,Static Application,0.14822792
+Annuity Amount,Static Application,0.111134976
+Days Since ID Update,Static Application,0.09773137
+NAME_EDUCATION_TYPE_Secondary_secondary_special,Static Application,0.08802713
+Employment Length,Static Application,0.08396115
+Goods Price,Static Application,0.07430047
+Age Proxy (Days Birth),Static Application,0.07234307
+OWN_CAR_AGE,Static Application,0.0686822
+Region Population Relative,Static Application,0.058852322
+Credit Amount,Static Application,0.048265636
+Days Since Registration,Static Application,0.04530216
+CODE_GENDER_M,Static Application,0.038083635
+DEF_30_CNT_SOCIAL_CIRCLE,Static Application,0.035793673
+YEARS_BUILD_MODE,Static Application,0.031158993
+NONLIVINGAREA_MODE,Static Application,0.026250051
+AMT_REQ_CREDIT_BUREAU_QRT,Static Application,0.02527744
+OBS_60_CNT_SOCIAL_CIRCLE,Static Application,0.024861861
+OBS_30_CNT_SOCIAL_CIRCLE,Static Application,0.02394641
+WEEKDAY_APPR_PROCESS_START_SUNDAY,Static Application,0.020506822
+CNT_FAM_MEMBERS,Static Application,0.020466236
+NAME_FAMILY_STATUS_Separated,Static Application,0.019220196
+NAME_INCOME_TYPE_Working,Static Application,0.018141164
+YEARS_BEGINEXPLUATATION_MEDI,Static Application,0.017686162
+FLAG_PHONE,Static Application,0.017047275
+AMT_REQ_CREDIT_BUREAU_YEAR,Static Application,0.016776107
+APARTMENTS_MEDI,Static Application,0.016704146
+OCCUPATION_TYPE_Drivers,Static Application,0.016525595
+YEARS_BUILD_AVG,Static Application,0.015268468
+WEEKDAY_APPR_PROCESS_START_MONDAY,Static Application,0.014962572
+Total Income,Static Application,0.014836115
+NAME_EDUCATION_TYPE_Higher_education,Static Application,0.014378116
+APARTMENTS_MODE,Static Application,0.014368668
+TOTALAREA_MODE,Static Application,0.013973744
+COMMONAREA_MEDI,Static Application,0.01388283
+ELEVATORS_MODE,Static Application,0.01351837
+LIVINGAREA_MODE,Static Application,0.01272903
+HOUR_APPR_PROCESS_START,Static Application,0.012325626
+REG_CITY_NOT_WORK_CITY,Static Application,0.011997775
+NAME_FAMILY_STATUS_Married,Static Application,0.011821103
+YEARS_BEGINEXPLUATATION_MODE,Static Application,0.011800591
+COMMONAREA_AVG,Static Application,0.011637796
+LANDAREA_MODE,Static Application,0.011496694
+NAME_FAMILY_STATUS_Widow,Static Application,0.011171689
+LIVINGAREA_AVG,Static Application,0.0105683785
+FLAG_EMP_PHONE,Static Application,0.010157131
+Number of Children,Static Application,0.009475785
+EXT_SOURCE_1_is_missing,Static Application,0.00902311
+FLOORSMIN_AVG,Static Application,0.008511624
+LIVINGAPARTMENTS_MODE,Static Application,0.008286988
+YEARS_BUILD_MEDI,Static Application,0.0070409407
+OCCUPATION_TYPE_Medicine_staff,Static Application,0.0070322496
+OCCUPATION_TYPE_Core_staff,Static Application,0.0068916315
+COMMONAREA_MODE,Static Application,0.0067357747
+APARTMENTS_AVG,Static Application,0.0063895863
+BASEMENTAREA_MODE,Static Application,0.00623454
+WEEKDAY_APPR_PROCESS_START_SATURDAY,Static Application,0.0059558484
+NAME_TYPE_SUITE_Spouse_partner,Static Application,0.0057581146
+LIVINGAPARTMENTS_AVG,Static Application,0.005694921
+BASEMENTAREA_MEDI,Static Application,0.005678884
+OWN_CAR_AGE_is_missing,Static Application,0.0055377693
+BASEMENTAREA_AVG,Static Application,0.0055221254
+LANDAREA_AVG,Static Application,0.0054353406
+YEARS_BEGINEXPLUATATION_AVG,Static Application,0.00461152
+LIVE_CITY_NOT_WORK_CITY,Static Application,0.0045673386
+OCCUPATION_TYPE_High_skill_tech_staff,Static Application,0.004478672
+AMT_REQ_CREDIT_BUREAU_MON,Static Application,0.00447505
+ENTRANCES_AVG,Static Application,0.004110396
+LIVINGAREA_MEDI,Static Application,0.004033395
+ELEVATORS_MEDI,Static Application,0.0039408775
+FLOORSMAX_AVG,Static Application,0.003892659
+FONDKAPREMONT_MODE_org_spec_account,Static Application,0.00378915
+NAME_HOUSING_TYPE_Municipal_apartment,Static Application,0.0037528325
+ELEVATORS_AVG,Static Application,0.003747835
+NONLIVINGAREA_AVG,Static Application,0.003644965
+REGION_RATING_CLIENT_W_CITY,Static Application,0.0036194748
+OCCUPATION_TYPE_Laborers,Static Application,0.0035008846
+FONDKAPREMONT_MODE_is_missing,Static Application,0.0034095466
+FLAG_OWN_REALTY_Y,Static Application,0.0033684485
+ENTRANCES_MEDI,Static Application,0.00329169
+NONLIVINGAREA_MEDI,Static Application,0.0032006348
+LANDAREA_MEDI,Static Application,0.0031324418
+LIVINGAPARTMENTS_MEDI,Static Application,0.0030405552
+FLAG_DOCUMENT_3,Static Application,0.003007412
+NONLIVINGAPARTMENTS_MODE,Static Application,0.0029390065
+NAME_EDUCATION_TYPE_Incomplete_higher,Static Application,0.0024546667
+WEEKDAY_APPR_PROCESS_START_TUESDAY,Static Application,0.002210292
+FLOORSMAX_MEDI,Static Application,0.0019308185
+NONLIVINGAPARTMENTS_MEDI,Static Application,0.001830868
+FLOORSMAX_MODE,Static Application,0.0017994872
+AMT_REQ_CREDIT_BUREAU_WEEK_is_missing,Static Application,0.0017192363
+REGION_RATING_CLIENT,Static Application,0.001504875
+NAME_CONTRACT_TYPE_Revolving_loans,Static Application,0.0014804738
+OCCUPATION_TYPE_is_missing,Static Application,0.0014571705
+NONLIVINGAPARTMENTS_AVG,Static Application,0.0014567381
+OCCUPATION_TYPE_Cleaning_staff,Static Application,0.0014305296
+FLAG_DOCUMENT_5,Static Application,0.0013856476
+COMMONAREA_MODE_is_missing,Static Application,0.0013070892
+YEARS_BUILD_AVG_is_missing,Static Application,0.001284436
+BASEMENTAREA_AVG_is_missing,Static Application,0.0010589018
+ORGANIZATION_TYPE_Transport_type_4,Static Application,0.0010001736
+WEEKDAY_APPR_PROCESS_START_THURSDAY,Static Application,0.0009767464
+NAME_HOUSING_TYPE_House_apartment,Static Application,0.00095092034
+NAME_INCOME_TYPE_State_servant,Static Application,0.0008731164
+WALLSMATERIAL_MODE_Stone_brick,Static Application,0.0008561814
+EXT_SOURCE_3_is_missing,Static Application,0.0008447402
+LIVE_REGION_NOT_WORK_REGION,Static Application,0.0008379976
+EMERGENCYSTATE_MODE_is_missing,Static Application,0.000680127
+FLAG_DOCUMENT_6,Static Application,0.00066966657
+ORGANIZATION_TYPE_Security,Static Application,0.0006013776
+LANDAREA_AVG_is_missing,Static Application,0.0005752575
+NAME_TYPE_SUITE_Unaccompanied,Static Application,0.00049285154
+OCCUPATION_TYPE_Low_skill_Laborers,Static Application,0.00041336444
+FLOORSMIN_MODE_is_missing,Static Application,0.00022285397
+COMMONAREA_AVG_is_missing,Static Application,0.0
+BASEMENTAREA_MODE_is_missing,Static Application,0.0
+NAME_INCOME_TYPE_Pensioner,Static Application,0.0
+NAME_HOUSING_TYPE_With_parents,Static Application,0.0
+NAME_FAMILY_STATUS_Single_not_married,Static Application,0.0
+LIVINGAREA_MEDI_is_missing,Static Application,0.0
+FLOORSMIN_MEDI,Static Application,0.0
+FLOORSMIN_AVG_is_missing,Static Application,0.0
+FLAG_EMAIL,Static Application,0.0
+FLAG_WORK_PHONE,Static Application,0.0
+ENTRANCES_MODE,Static Application,0.0
+DEF_60_CNT_SOCIAL_CIRCLE,Static Application,0.0
+ELEVATORS_AVG_is_missing,Static Application,0.0
+ELEVATORS_MEDI_is_missing,Static Application,0.0
+FLAG_DOCUMENT_8,Static Application,0.0
+OCCUPATION_TYPE_Managers,Static Application,0.0
+NAME_TYPE_SUITE_Family,Static Application,0.0
+NONLIVINGAREA_MEDI_is_missing,Static Application,0.0
+ORGANIZATION_TYPE_Medicine,Static Application,0.0
+ORGANIZATION_TYPE_Kindergarten,Static Application,0.0
+ORGANIZATION_TYPE_Industry_type_3,Static Application,0.0
+ORGANIZATION_TYPE_Government,Static Application,0.0
+ORGANIZATION_TYPE_Construction,Static Application,0.0
+ORGANIZATION_TYPE_Business_Entity_Type_3,Static Application,0.0
+ORGANIZATION_TYPE_Business_Entity_Type_2,Static Application,0.0
+OCCUPATION_TYPE_Sales_staff,Static Application,0.0
+REG_CITY_NOT_LIVE_CITY,Static Application,0.0
+ORGANIZATION_TYPE_Police,Static Application,0.0
+ORGANIZATION_TYPE_Other,Static Application,0.0
+ORGANIZATION_TYPE_Self_employed,Static Application,0.0
+ORGANIZATION_TYPE_School,Static Application,0.0
+WALLSMATERIAL_MODE_Panel,Static Application,0.0
+WEEKDAY_APPR_PROCESS_START_WEDNESDAY,Static Application,0.0
+YEARS_BEGINEXPLUATATION_MODE_is_missing,Static Application,0.0
