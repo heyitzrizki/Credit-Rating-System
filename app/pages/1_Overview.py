@@ -1,7 +1,12 @@
 import plotly.express as px
 import pandas as pd
 import streamlit as st
+import sys
+from pathlib import Path
 
+APP_DIR = Path(__file__).resolve().parents[1]
+if str(APP_DIR) not in sys.path:
+    sys.path.append(str(APP_DIR))
 from utils import load_data_objects, format_pct, format_pd
 
 st.set_page_config(page_title="Executive Dashboard", layout="wide")
