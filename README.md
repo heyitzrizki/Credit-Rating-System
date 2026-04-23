@@ -100,29 +100,30 @@ Calibrated PD
 ---
 
 ## 📦 Project Structure
+```bash
 Credit-Rating-System/
 │
 ├── app/
-│ ├── streamlit_app.py
-│ ├── utils.py
-│ ├── model_utils.py
-│ └── pages/
-│ ├── 1_Overview.py
-│ ├── 2_Model_Performance.py
-│ ├── 3_Borrower_Risk_Scoring.py
-│ ├── 4_Portfolio_Segmentation.py
-│ └── 5_Watchlist.py
+│   ├── streamlit_app.py
+│   ├── utils.py
+│   ├── model_utils.py
+│   └── pages/
+│       ├── 1_Overview.py
+│       ├── 2_Model_Performance.py
+│       ├── 3_Borrower_Risk_Scoring.py
+│       ├── 4_Portfolio_Segmentation.py
+│       └── 5_Watchlist.py
 │
 ├── artifacts/
-│ ├── model files (.joblib, .pt)
-│ ├── processed datasets (.csv)
-│ └── SHAP outputs
+│   ├── model files (.joblib, .pt)
+│   ├── processed datasets (.csv)
+│   └── SHAP outputs
 │
 ├── notebooks/
-│ └── credit_rating_final.ipynb
+│   └── credit_rating_final.ipynb
 │
 └── requirements.txt
-
+```
 
 ---
 
