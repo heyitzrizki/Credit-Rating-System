@@ -15,21 +15,31 @@ st.title("📊 Executive Overview")
 
 data = load_data_objects()
 
-exec_summary = data["executive_summary"]
-grade_summary = data["credit_grade_summary"]
-decision_summary = data["decision_grade_summary"]
+exec_summary = data["executive_summary"].copy()
+grade_summary = data["credit_grade_summary"].copy()
+decision_summary = data["decision_grade_summary"].copy()
 
+# Safety cast
+grade_summary["credit_grade"] = grade_summary["credit_grade"].astype(str)
+decision_summary["decision_recommendation"] = decision_summary["decision_recommendation"].astype(str)
+
+summary = exec_summary.iloc[0]
+
+# =========================
 # KPI SECTION
+# =========================
 st.subheader("Key Portfolio Metrics")
 
 k1, k2, k3, k4 = st.columns(4)
 
-k1.metric("Portfolio Avg PD", format_pct(exec_summary["avg_pd"].iloc[0]))
-k2.metric("High Risk Exposure (B/C/D)", format_pct(exec_summary["high_risk_share"].iloc[0]))
-k3.metric("Approval Rate", format_pct(exec_summary["approval_rate"].iloc[0]))
-k4.metric("Observed Default Rate", format_pct(exec_summary["observed_default_rate"].iloc[0]))
+k1.metric("Portfolio Avg PD", format_pd(summary["portfolio_avg_calibrated_pd"]))
+k2.metric("High Risk Exposure (B/C/D)", format_pct(summary["high_risk_exposure"]))
+k3.metric("Approval Rate", format_pct(summary["approval_rate"]))
+k4.metric("Observed Default Rate", format_pct(summary["observed_default_rate"]))
 
+# =========================
 # DISTRIBUTION SECTION
+# =========================
 st.subheader("Portfolio Distribution")
 
 col1, col2 = st.columns(2)
@@ -44,13 +54,15 @@ col1.plotly_chart(fig_grade, use_container_width=True, key="overview_grade_distr
 
 fig_decision = px.pie(
     decision_summary,
-    names="decision",
+    names="decision_recommendation",
     values="borrower_count",
     title="Decision Distribution"
 )
 col2.plotly_chart(fig_decision, use_container_width=True, key="overview_decision_distribution")
 
+# =========================
 # RISK ANALYSIS
+# =========================
 st.subheader("Risk Analysis")
 
 col3, col4 = st.columns(2)
