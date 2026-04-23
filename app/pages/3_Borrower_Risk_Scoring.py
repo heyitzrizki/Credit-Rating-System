@@ -10,10 +10,13 @@ import streamlit as st
 from utils import (
     assign_credit_grade_from_summary,
     assign_decision_from_grade,
+    load_data_objects,
+)
+
+from model_utils import (
     build_existing_borrower_sequence,
     build_temporal_preset,
     get_tcn_embedding,
-    load_data_objects,
     load_models,
     preprocess_static_row,
     score_borrower,
