@@ -138,68 +138,106 @@ pip install -r requirements.txt
 streamlit run app/streamlit_app.py
 
 ## 📊 Data Pipeline
-Raw data → Feature engineering
-Static + Temporal features
-Missing value handling
-Encoding + alignment
-TCN embedding generation
-Model training (XGBoost)
-Calibration (Platt scaling)
-Artifact generation
+
+```text
+Raw Data
+   ↓
+Feature Engineering
+   ↓
+Static + Temporal Feature Construction
+   ↓
+Missing Value Handling & Encoding
+   ↓
+Feature Alignment
+   ↓
+TCN Embedding Generation
+   ↓
+Model Training (XGBoost)
+   ↓
+Probability Calibration (Platt Scaling)
+   ↓
+Artifact Generation
+```
+
+---
 
 ## 📈 Explainability
-SHAP (Global + Local)
-Feature importance ranking
-Individual borrower explanations
-Temporal Attention
-Highlights critical time periods influencing risk
+
+- **SHAP (Global & Local)**  
+  Provides both portfolio-level and borrower-level interpretability  
+
+- **Feature Importance Ranking**  
+  Identifies key drivers of credit risk  
+
+- **Individual Borrower Explanations**  
+  Explains why a borrower is classified as high or low risk  
+
+- **Temporal Attention Analysis**  
+  Highlights critical time periods influencing model decisions  
+
+---
 
 ## 🧪 Model Evaluation
 
-Metrics used:
+**Metrics Used:**
+- ROC-AUC  
+- PR-AUC  
+- Brier Score  
+- Expected Calibration Error (ECE)  
 
-ROC-AUC
-PR-AUC
-Brier Score
-Expected Calibration Error (ECE)
+**Evaluation Focus:**
+- Emphasis on **probability calibration**
+- Prioritizes **business usability over raw predictive accuracy**
 
-Focus:
-
-Probability calibration and business usability over raw accuracy
+---
 
 ## 🧩 Design Philosophy
 
-This system is built to reflect:
+This system is designed to reflect real-world credit risk environments:
 
-Real-world credit risk pipelines
-Separation between:
-data layer
-model layer
-UI layer
-Scalability for:
-production deployment
-future model upgrades
+- **Layered Architecture**
+  - Data Layer  
+  - Model Layer  
+  - UI Layer  
+
+- **Production-Oriented Design**
+  - Scalable for deployment  
+  - Modular for future model upgrades  
+
+- **Business-Centric Approach**
+  - Interpretability over black-box performance  
+  - Decision support over pure prediction  
+
+---
 
 ## ⚠️ Limitations
-Large SHAP file (~70MB) may impact deployment performance
-No real-time API integration (batch-based system)
-Assumes clean structured financial data
+
+- Large SHAP dataset (~70MB) may impact deployment performance  
+- No real-time API (currently batch-based processing)  
+- Assumes structured and pre-cleaned financial data  
+
+---
 
 ## 🔮 Future Improvements
-Model monitoring (drift detection)
-Real-time scoring API
-Automated retraining pipeline
-Scenario simulation for credit policy testing
+
+- Model monitoring & drift detection  
+- Real-time scoring API  
+- Automated retraining pipeline  
+- Scenario simulation for credit policy testing  
+
+---
 
 ## 👤 Author
 
-Rizki Anwar
-Business Analytics & Machine Learning
+**Rizki Anwar**  
+Business Analytics & Machine Learning  
+
+---
 
 ## 📌 Notes
 
 This project is intended for:
 
-learning purposes
-portfolio demonstration
-simulation of real-world credit scoring systems
+- Learning purposes  
+- Portfolio demonstration  
+- Simulation of real-world credit scoring systems  
