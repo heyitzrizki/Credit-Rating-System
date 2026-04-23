@@ -1,6 +1,11 @@
 import pandas as pd
 import streamlit as st
+import sys
+from pathlib import Path
 
+APP_DIR = Path(__file__).resolve().parents[1]
+if str(APP_DIR) not in sys.path:
+    sys.path.append(str(APP_DIR))
 from utils import (
     assign_credit_grade_from_summary,
     assign_decision_from_grade,
