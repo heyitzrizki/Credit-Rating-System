@@ -1,215 +1,215 @@
 feature,mean_abs_shap,feature_display,feature_group
-EXT_SOURCE_2,0.39123318,External Risk Score 2,Static Application
-EXT_SOURCE_3,0.33062616,External Risk Score 3,Static Application
-EXT_SOURCE_1,0.14430524,External Risk Score 1,Static Application
-DAYS_LAST_PHONE_CHANGE,0.11838077,Days Since Last Phone Change,Static Application
-tcn_emb_v2_38,0.100767076,Temporal Behavioral Pattern,Temporal Embedding
-NAME_EDUCATION_TYPE_Secondary_secondary_special,0.084575966,NAME_EDUCATION_TYPE_Secondary_secondary_special,Static Application
-DAYS_ID_PUBLISH,0.08433332,Days Since ID Update,Static Application
-tcn_emb_v2_6,0.0775291,Temporal Behavioral Pattern,Temporal Embedding
-AMT_ANNUITY,0.06932681,Annuity Amount,Static Application
-DAYS_BIRTH,0.059588816,Age Proxy (Days Birth),Static Application
-DAYS_EMPLOYED,0.05785304,Employment Length,Static Application
-OWN_CAR_AGE,0.045056753,OWN_CAR_AGE,Static Application
-AMT_GOODS_PRICE,0.04289956,Goods Price,Static Application
-tcn_emb_v2_56,0.042285666,Temporal Behavioral Pattern,Temporal Embedding
-CODE_GENDER_M,0.04072008,CODE_GENDER_M,Static Application
-tcn_emb_v2_62,0.036338005,Temporal Behavioral Pattern,Temporal Embedding
-DAYS_REGISTRATION,0.036255617,Days Since Registration,Static Application
-AMT_CREDIT,0.036132824,Credit Amount,Static Application
-tcn_emb_v2_0,0.031227639,Temporal Behavioral Pattern,Temporal Embedding
-REGION_POPULATION_RELATIVE,0.030634267,Region Population Relative,Static Application
-tcn_emb_v2_27,0.029094758,Temporal Behavioral Pattern,Temporal Embedding
-OBS_60_CNT_SOCIAL_CIRCLE,0.024262873,OBS_60_CNT_SOCIAL_CIRCLE,Static Application
-tcn_emb_v2_19,0.022498535,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_8,0.02235351,Temporal Behavioral Pattern,Temporal Embedding
-NONLIVINGAREA_MODE,0.02125432,NONLIVINGAREA_MODE,Static Application
-DEF_30_CNT_SOCIAL_CIRCLE,0.02119241,DEF_30_CNT_SOCIAL_CIRCLE,Static Application
-YEARS_BUILD_MODE,0.020518681,YEARS_BUILD_MODE,Static Application
-NAME_FAMILY_STATUS_Separated,0.017719122,NAME_FAMILY_STATUS_Separated,Static Application
-tcn_emb_v2_30,0.017357836,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_34,0.016525885,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_29,0.016377866,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_42,0.016026976,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_14,0.015350438,Temporal Behavioral Pattern,Temporal Embedding
-YEARS_BUILD_MEDI,0.014927031,YEARS_BUILD_MEDI,Static Application
-OCCUPATION_TYPE_Drivers,0.014594533,OCCUPATION_TYPE_Drivers,Static Application
-tcn_emb_v2_25,0.014454352,Temporal Behavioral Pattern,Temporal Embedding
-REG_CITY_NOT_WORK_CITY,0.014379648,REG_CITY_NOT_WORK_CITY,Static Application
-FLAG_PHONE,0.014278294,FLAG_PHONE,Static Application
-YEARS_BEGINEXPLUATATION_MEDI,0.0131379105,YEARS_BEGINEXPLUATATION_MEDI,Static Application
-AMT_REQ_CREDIT_BUREAU_QRT,0.0128582325,AMT_REQ_CREDIT_BUREAU_QRT,Static Application
-OBS_30_CNT_SOCIAL_CIRCLE,0.012699246,OBS_30_CNT_SOCIAL_CIRCLE,Static Application
-AMT_REQ_CREDIT_BUREAU_YEAR,0.01255524,AMT_REQ_CREDIT_BUREAU_YEAR,Static Application
-tcn_emb_v2_35,0.012308955,Temporal Behavioral Pattern,Temporal Embedding
-AMT_INCOME_TOTAL,0.011522384,Total Income,Static Application
-NAME_INCOME_TYPE_Working,0.011471298,NAME_INCOME_TYPE_Working,Static Application
-tcn_emb_v2_9,0.010984351,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_41,0.010823758,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_15,0.010358915,Temporal Behavioral Pattern,Temporal Embedding
-APARTMENTS_AVG,0.009849697,APARTMENTS_AVG,Static Application
-COMMONAREA_MEDI,0.009562559,COMMONAREA_MEDI,Static Application
-LIVE_CITY_NOT_WORK_CITY,0.009433822,LIVE_CITY_NOT_WORK_CITY,Static Application
-WEEKDAY_APPR_PROCESS_START_MONDAY,0.008759688,WEEKDAY_APPR_PROCESS_START_MONDAY,Static Application
-CNT_FAM_MEMBERS,0.008684387,CNT_FAM_MEMBERS,Static Application
-tcn_emb_v2_32,0.008636151,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_20,0.00831162,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_4,0.008157453,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_3,0.008114781,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_55,0.00796525,Temporal Behavioral Pattern,Temporal Embedding
-WEEKDAY_APPR_PROCESS_START_SUNDAY,0.007952539,WEEKDAY_APPR_PROCESS_START_SUNDAY,Static Application
-HOUR_APPR_PROCESS_START,0.007714901,HOUR_APPR_PROCESS_START,Static Application
-tcn_emb_v2_57,0.0076207966,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_45,0.0074976613,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_33,0.0071220957,Temporal Behavioral Pattern,Temporal Embedding
-YEARS_BEGINEXPLUATATION_MODE,0.007071154,YEARS_BEGINEXPLUATATION_MODE,Static Application
-tcn_emb_v2_22,0.0066066138,Temporal Behavioral Pattern,Temporal Embedding
-YEARS_BEGINEXPLUATATION_AVG,0.006463597,YEARS_BEGINEXPLUATATION_AVG,Static Application
-tcn_emb_v2_40,0.006354933,Temporal Behavioral Pattern,Temporal Embedding
-BASEMENTAREA_AVG,0.006253646,BASEMENTAREA_AVG,Static Application
-BASEMENTAREA_MEDI,0.0060769403,BASEMENTAREA_MEDI,Static Application
-tcn_emb_v2_36,0.006068971,Temporal Behavioral Pattern,Temporal Embedding
-CNT_CHILDREN,0.0058737835,Number of Children,Static Application
-tcn_emb_v2_48,0.0058087194,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_26,0.005466255,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_21,0.0053107473,Temporal Behavioral Pattern,Temporal Embedding
-LIVINGAREA_MEDI,0.00528036,LIVINGAREA_MEDI,Static Application
-FLOORSMIN_MODE_is_missing,0.0050824936,FLOORSMIN_MODE_is_missing,Static Application
-FLAG_EMP_PHONE,0.005052301,FLAG_EMP_PHONE,Static Application
-NAME_EDUCATION_TYPE_Higher_education,0.0048484774,NAME_EDUCATION_TYPE_Higher_education,Static Application
-NAME_FAMILY_STATUS_Married,0.0044105933,NAME_FAMILY_STATUS_Married,Static Application
-tcn_emb_v2_63,0.004350869,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_11,0.0042247507,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_23,0.004206365,Temporal Behavioral Pattern,Temporal Embedding
-COMMONAREA_AVG,0.0041441894,COMMONAREA_AVG,Static Application
-TOTALAREA_MODE,0.0040525794,TOTALAREA_MODE,Static Application
-tcn_emb_v2_2,0.004022856,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_50,0.0038875209,Temporal Behavioral Pattern,Temporal Embedding
-NAME_FAMILY_STATUS_Widow,0.0038124493,NAME_FAMILY_STATUS_Widow,Static Application
-LIVINGAREA_AVG,0.003798012,LIVINGAREA_AVG,Static Application
-FONDKAPREMONT_MODE_is_missing,0.0037044745,FONDKAPREMONT_MODE_is_missing,Static Application
-APARTMENTS_MODE,0.003647838,APARTMENTS_MODE,Static Application
-tcn_emb_v2_52,0.003642114,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_28,0.0036132226,Temporal Behavioral Pattern,Temporal Embedding
-TOTALAREA_MODE_is_missing,0.0035647822,TOTALAREA_MODE_is_missing,Static Application
-tcn_emb_v2_10,0.0035234652,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_18,0.0033557122,Temporal Behavioral Pattern,Temporal Embedding
-OCCUPATION_TYPE_Medicine_staff,0.0032182096,OCCUPATION_TYPE_Medicine_staff,Static Application
-tcn_emb_v2_47,0.003062368,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_60,0.0030328862,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_24,0.0030064736,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_49,0.00282664,Temporal Behavioral Pattern,Temporal Embedding
-NAME_INCOME_TYPE_Pensioner,0.0027722716,NAME_INCOME_TYPE_Pensioner,Static Application
-COMMONAREA_MODE,0.0027340052,COMMONAREA_MODE,Static Application
-WALLSMATERIAL_MODE_Stone_brick,0.0026822824,WALLSMATERIAL_MODE_Stone_brick,Static Application
-tcn_emb_v2_12,0.0025957287,Temporal Behavioral Pattern,Temporal Embedding
-FLOORSMIN_MEDI,0.002520719,FLOORSMIN_MEDI,Static Application
-BASEMENTAREA_MODE,0.0025205067,BASEMENTAREA_MODE,Static Application
-tcn_emb_v2_13,0.0025110447,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_1,0.002372113,Temporal Behavioral Pattern,Temporal Embedding
-LANDAREA_MODE,0.0022851157,LANDAREA_MODE,Static Application
-tcn_emb_v2_39,0.002270286,Temporal Behavioral Pattern,Temporal Embedding
-OCCUPATION_TYPE_High_skill_tech_staff,0.002242518,OCCUPATION_TYPE_High_skill_tech_staff,Static Application
-tcn_emb_v2_58,0.0022073842,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_7,0.002116385,Temporal Behavioral Pattern,Temporal Embedding
-LIVINGAPARTMENTS_MODE,0.0021097437,LIVINGAPARTMENTS_MODE,Static Application
-tcn_emb_v2_46,0.0020582334,Temporal Behavioral Pattern,Temporal Embedding
-DEF_60_CNT_SOCIAL_CIRCLE,0.0020442642,DEF_60_CNT_SOCIAL_CIRCLE,Static Application
-AMT_REQ_CREDIT_BUREAU_MON,0.0019302274,AMT_REQ_CREDIT_BUREAU_MON,Static Application
-LANDAREA_AVG,0.0019260881,LANDAREA_AVG,Static Application
-ENTRANCES_AVG,0.0017377798,ENTRANCES_AVG,Static Application
-APARTMENTS_MEDI,0.0016988277,APARTMENTS_MEDI,Static Application
-FLOORSMAX_AVG,0.0016495566,FLOORSMAX_AVG,Static Application
-LANDAREA_MEDI,0.0016477632,LANDAREA_MEDI,Static Application
-LIVINGAREA_MODE,0.0013456661,LIVINGAREA_MODE,Static Application
-NONLIVINGAREA_AVG,0.0013406181,NONLIVINGAREA_AVG,Static Application
-EXT_SOURCE_3_is_missing,0.0013137098,EXT_SOURCE_3_is_missing,Static Application
-FLOORSMIN_AVG,0.0012884311,FLOORSMIN_AVG,Static Application
-YEARS_BUILD_AVG,0.0012093436,YEARS_BUILD_AVG,Static Application
-tcn_emb_v2_59,0.0011757172,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_31,0.0011392479,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_17,0.0011087701,Temporal Behavioral Pattern,Temporal Embedding
-NAME_TYPE_SUITE_Spouse_partner,0.001094299,NAME_TYPE_SUITE_Spouse_partner,Static Application
-NAME_HOUSING_TYPE_Municipal_apartment,0.0010582837,NAME_HOUSING_TYPE_Municipal_apartment,Static Application
-ENTRANCES_MEDI,0.0010582813,ENTRANCES_MEDI,Static Application
-FLOORSMAX_MODE,0.0010518342,FLOORSMAX_MODE,Static Application
-FLAG_DOCUMENT_3,0.00095891376,FLAG_DOCUMENT_3,Static Application
-OCCUPATION_TYPE_Core_staff,0.0009428745,OCCUPATION_TYPE_Core_staff,Static Application
-LIVINGAPARTMENTS_MEDI,0.00089331955,LIVINGAPARTMENTS_MEDI,Static Application
-FLAG_OWN_REALTY_Y,0.0008075786,FLAG_OWN_REALTY_Y,Static Application
-tcn_emb_v2_44,0.0007934029,Temporal Behavioral Pattern,Temporal Embedding
-REGION_RATING_CLIENT_W_CITY,0.000718203,REGION_RATING_CLIENT_W_CITY,Static Application
-LANDAREA_MEDI_is_missing,0.0007156893,LANDAREA_MEDI_is_missing,Static Application
-FONDKAPREMONT_MODE_org_spec_account,0.00069783186,FONDKAPREMONT_MODE_org_spec_account,Static Application
-tcn_emb_v2_61,0.00068667985,Temporal Behavioral Pattern,Temporal Embedding
-NAME_TYPE_SUITE_Family,0.00067946466,NAME_TYPE_SUITE_Family,Static Application
-tcn_emb_v2_54,0.00065548584,Temporal Behavioral Pattern,Temporal Embedding
-OCCUPATION_TYPE_Laborers,0.0006253496,OCCUPATION_TYPE_Laborers,Static Application
-OWN_CAR_AGE_is_missing,0.00062457874,OWN_CAR_AGE_is_missing,Static Application
-FLAG_DOCUMENT_6,0.00058165984,FLAG_DOCUMENT_6,Static Application
-ENTRANCES_MODE,0.00056158355,ENTRANCES_MODE,Static Application
-EXT_SOURCE_1_is_missing,0.0005336273,EXT_SOURCE_1_is_missing,Static Application
-tcn_emb_v2_53,0.00051812414,Temporal Behavioral Pattern,Temporal Embedding
-NONLIVINGAREA_MEDI,0.0005105968,NONLIVINGAREA_MEDI,Static Application
-tcn_emb_v2_43,0.000510129,Temporal Behavioral Pattern,Temporal Embedding
-YEARS_BUILD_AVG_is_missing,0.00048836647,YEARS_BUILD_AVG_is_missing,Static Application
-NAME_HOUSING_TYPE_With_parents,0.00042582184,NAME_HOUSING_TYPE_With_parents,Static Application
-BASEMENTAREA_AVG_is_missing,0.00042019735,BASEMENTAREA_AVG_is_missing,Static Application
-LIVINGAPARTMENTS_AVG,0.00041453514,LIVINGAPARTMENTS_AVG,Static Application
-EMERGENCYSTATE_MODE_is_missing,0.00041395737,EMERGENCYSTATE_MODE_is_missing,Static Application
-NAME_HOUSING_TYPE_House_apartment,0.00035269966,NAME_HOUSING_TYPE_House_apartment,Static Application
-NAME_CONTRACT_TYPE_Revolving_loans,0.0003332092,NAME_CONTRACT_TYPE_Revolving_loans,Static Application
-NAME_TYPE_SUITE_Unaccompanied,0.000326599,NAME_TYPE_SUITE_Unaccompanied,Static Application
-LIVINGAREA_MEDI_is_missing,0.0002724392,LIVINGAREA_MEDI_is_missing,Static Application
-WEEKDAY_APPR_PROCESS_START_THURSDAY,0.0,WEEKDAY_APPR_PROCESS_START_THURSDAY,Static Application
-ORGANIZATION_TYPE_Business_Entity_Type_3,0.0,ORGANIZATION_TYPE_Business_Entity_Type_3,Static Application
+EXT_SOURCE_2,0.39124882,External Risk Score 2,Static Application
+EXT_SOURCE_3,0.33305848,External Risk Score 3,Static Application
+EXT_SOURCE_1,0.14360283,External Risk Score 1,Static Application
+tcn_emb_v2_27,0.12365822,Temporal Behavioral Pattern,Temporal Embedding
+DAYS_LAST_PHONE_CHANGE,0.11013382,Days Since Last Phone Change,Static Application
+NAME_EDUCATION_TYPE_Secondary_secondary_special,0.084006526,NAME_EDUCATION_TYPE_Secondary_secondary_special,Static Application
+AMT_ANNUITY,0.08166481,Annuity Amount,Static Application
+DAYS_ID_PUBLISH,0.080924034,Days Since ID Update,Static Application
+DAYS_BIRTH,0.06802117,Age Proxy (Days Birth),Static Application
+DAYS_EMPLOYED,0.06440643,Employment Length,Static Application
+AMT_GOODS_PRICE,0.04888403,Goods Price,Static Application
+OWN_CAR_AGE,0.04576399,OWN_CAR_AGE,Static Application
+DAYS_REGISTRATION,0.038507003,Days Since Registration,Static Application
+REGION_POPULATION_RELATIVE,0.035479408,Region Population Relative,Static Application
+tcn_emb_v2_4,0.033614565,Temporal Behavioral Pattern,Temporal Embedding
+AMT_CREDIT,0.032016966,Credit Amount,Static Application
+CODE_GENDER_M,0.031929746,CODE_GENDER_M,Static Application
+tcn_emb_v2_37,0.028092215,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_55,0.027763123,Temporal Behavioral Pattern,Temporal Embedding
+NONLIVINGAREA_MODE,0.027405957,NONLIVINGAREA_MODE,Static Application
+OBS_60_CNT_SOCIAL_CIRCLE,0.020253126,OBS_60_CNT_SOCIAL_CIRCLE,Static Application
+DEF_30_CNT_SOCIAL_CIRCLE,0.019335965,DEF_30_CNT_SOCIAL_CIRCLE,Static Application
+tcn_emb_v2_29,0.018761508,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_13,0.01843126,Temporal Behavioral Pattern,Temporal Embedding
+YEARS_BUILD_MEDI,0.01814313,YEARS_BUILD_MEDI,Static Application
+tcn_emb_v2_61,0.01807343,Temporal Behavioral Pattern,Temporal Embedding
+FLAG_PHONE,0.017364725,FLAG_PHONE,Static Application
+NAME_FAMILY_STATUS_Separated,0.016940292,NAME_FAMILY_STATUS_Separated,Static Application
+OBS_30_CNT_SOCIAL_CIRCLE,0.01642516,OBS_30_CNT_SOCIAL_CIRCLE,Static Application
+tcn_emb_v2_54,0.014504695,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_57,0.014502061,Temporal Behavioral Pattern,Temporal Embedding
+OCCUPATION_TYPE_Drivers,0.014366964,OCCUPATION_TYPE_Drivers,Static Application
+tcn_emb_v2_21,0.01431585,Temporal Behavioral Pattern,Temporal Embedding
+YEARS_BEGINEXPLUATATION_MEDI,0.014092553,YEARS_BEGINEXPLUATATION_MEDI,Static Application
+NAME_INCOME_TYPE_Working,0.013388689,NAME_INCOME_TYPE_Working,Static Application
+YEARS_BUILD_MODE,0.012609969,YEARS_BUILD_MODE,Static Application
+tcn_emb_v2_56,0.012246448,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_19,0.012243719,Temporal Behavioral Pattern,Temporal Embedding
+AMT_REQ_CREDIT_BUREAU_QRT,0.011951305,AMT_REQ_CREDIT_BUREAU_QRT,Static Application
+AMT_REQ_CREDIT_BUREAU_YEAR,0.011919792,AMT_REQ_CREDIT_BUREAU_YEAR,Static Application
+tcn_emb_v2_28,0.010977225,Temporal Behavioral Pattern,Temporal Embedding
+WEEKDAY_APPR_PROCESS_START_SUNDAY,0.010691359,WEEKDAY_APPR_PROCESS_START_SUNDAY,Static Application
+LIVE_CITY_NOT_WORK_CITY,0.010500243,LIVE_CITY_NOT_WORK_CITY,Static Application
+tcn_emb_v2_10,0.010484231,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_52,0.01033162,Temporal Behavioral Pattern,Temporal Embedding
+APARTMENTS_AVG,0.0098987585,APARTMENTS_AVG,Static Application
+tcn_emb_v2_22,0.009690784,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_39,0.009571233,Temporal Behavioral Pattern,Temporal Embedding
+AMT_INCOME_TOTAL,0.009518974,Total Income,Static Application
+REG_CITY_NOT_WORK_CITY,0.009435812,REG_CITY_NOT_WORK_CITY,Static Application
+WEEKDAY_APPR_PROCESS_START_MONDAY,0.008834409,WEEKDAY_APPR_PROCESS_START_MONDAY,Static Application
+tcn_emb_v2_8,0.00876498,Temporal Behavioral Pattern,Temporal Embedding
+YEARS_BEGINEXPLUATATION_MODE,0.008447202,YEARS_BEGINEXPLUATATION_MODE,Static Application
+tcn_emb_v2_33,0.008287186,Temporal Behavioral Pattern,Temporal Embedding
+NAME_FAMILY_STATUS_Married,0.008260554,NAME_FAMILY_STATUS_Married,Static Application
+tcn_emb_v2_16,0.008146561,Temporal Behavioral Pattern,Temporal Embedding
+CNT_CHILDREN,0.008008117,Number of Children,Static Application
+COMMONAREA_MEDI,0.0071609304,COMMONAREA_MEDI,Static Application
+tcn_emb_v2_2,0.006641532,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_15,0.006626371,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_42,0.006361238,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_45,0.006014641,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_41,0.0060044057,Temporal Behavioral Pattern,Temporal Embedding
+HOUR_APPR_PROCESS_START,0.005769659,HOUR_APPR_PROCESS_START,Static Application
+TOTALAREA_MODE_is_missing,0.005691367,TOTALAREA_MODE_is_missing,Static Application
+tcn_emb_v2_26,0.005303198,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_7,0.0051515684,Temporal Behavioral Pattern,Temporal Embedding
+FLAG_EMP_PHONE,0.0049503567,FLAG_EMP_PHONE,Static Application
+tcn_emb_v2_11,0.004721923,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_40,0.0045336895,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_43,0.0045106164,Temporal Behavioral Pattern,Temporal Embedding
+BASEMENTAREA_MODE,0.00449322,BASEMENTAREA_MODE,Static Application
+YEARS_BUILD_AVG,0.004479341,YEARS_BUILD_AVG,Static Application
+tcn_emb_v2_53,0.004468359,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_0,0.00446362,Temporal Behavioral Pattern,Temporal Embedding
+CNT_FAM_MEMBERS,0.0044620396,CNT_FAM_MEMBERS,Static Application
+FLOORSMIN_MODE_is_missing,0.004366192,FLOORSMIN_MODE_is_missing,Static Application
+BASEMENTAREA_MEDI,0.0042116684,BASEMENTAREA_MEDI,Static Application
+LIVINGAREA_MODE,0.003985822,LIVINGAREA_MODE,Static Application
+APARTMENTS_MODE,0.003932895,APARTMENTS_MODE,Static Application
+COMMONAREA_MODE,0.0039156144,COMMONAREA_MODE,Static Application
+tcn_emb_v2_1,0.0037753861,Temporal Behavioral Pattern,Temporal Embedding
+BASEMENTAREA_AVG,0.0037282247,BASEMENTAREA_AVG,Static Application
+LANDAREA_AVG,0.0036064882,LANDAREA_AVG,Static Application
+FLOORSMIN_AVG,0.0035074444,FLOORSMIN_AVG,Static Application
+tcn_emb_v2_38,0.0034933079,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_50,0.0034608608,Temporal Behavioral Pattern,Temporal Embedding
+DEF_60_CNT_SOCIAL_CIRCLE,0.0034242512,DEF_60_CNT_SOCIAL_CIRCLE,Static Application
+tcn_emb_v2_58,0.0033867771,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_44,0.0032801838,Temporal Behavioral Pattern,Temporal Embedding
+OCCUPATION_TYPE_High_skill_tech_staff,0.003274198,OCCUPATION_TYPE_High_skill_tech_staff,Static Application
+APARTMENTS_MEDI,0.0032352903,APARTMENTS_MEDI,Static Application
+LIVINGAPARTMENTS_MODE,0.0032099285,LIVINGAPARTMENTS_MODE,Static Application
+NAME_FAMILY_STATUS_Widow,0.0030974215,NAME_FAMILY_STATUS_Widow,Static Application
+tcn_emb_v2_24,0.003061029,Temporal Behavioral Pattern,Temporal Embedding
+NAME_INCOME_TYPE_Pensioner,0.0030052864,NAME_INCOME_TYPE_Pensioner,Static Application
+tcn_emb_v2_34,0.0029703965,Temporal Behavioral Pattern,Temporal Embedding
+FONDKAPREMONT_MODE_is_missing,0.002964226,FONDKAPREMONT_MODE_is_missing,Static Application
+NONLIVINGAREA_MEDI,0.002906554,NONLIVINGAREA_MEDI,Static Application
+tcn_emb_v2_23,0.002890579,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_17,0.0028401061,Temporal Behavioral Pattern,Temporal Embedding
+OCCUPATION_TYPE_Medicine_staff,0.002836431,OCCUPATION_TYPE_Medicine_staff,Static Application
+tcn_emb_v2_63,0.002806849,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_62,0.002686286,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_32,0.002601654,Temporal Behavioral Pattern,Temporal Embedding
+LIVINGAREA_MEDI,0.0025810304,LIVINGAREA_MEDI,Static Application
+TOTALAREA_MODE,0.0025423039,TOTALAREA_MODE,Static Application
+FLAG_DOCUMENT_3,0.0024769292,FLAG_DOCUMENT_3,Static Application
+COMMONAREA_AVG,0.0024675447,COMMONAREA_AVG,Static Application
+tcn_emb_v2_48,0.0024258364,Temporal Behavioral Pattern,Temporal Embedding
+NAME_EDUCATION_TYPE_Higher_education,0.0024055154,NAME_EDUCATION_TYPE_Higher_education,Static Application
+WALLSMATERIAL_MODE_Stone_brick,0.0022632065,WALLSMATERIAL_MODE_Stone_brick,Static Application
+FLOORSMIN_MEDI,0.002249603,FLOORSMIN_MEDI,Static Application
+tcn_emb_v2_47,0.002049424,Temporal Behavioral Pattern,Temporal Embedding
+NAME_TYPE_SUITE_Spouse_partner,0.0020450682,NAME_TYPE_SUITE_Spouse_partner,Static Application
+tcn_emb_v2_49,0.0018781573,Temporal Behavioral Pattern,Temporal Embedding
+LIVINGAPARTMENTS_MEDI,0.0018450627,LIVINGAPARTMENTS_MEDI,Static Application
+EXT_SOURCE_1_is_missing,0.0017502233,EXT_SOURCE_1_is_missing,Static Application
+tcn_emb_v2_46,0.00174028,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_51,0.0017343205,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_12,0.0017289071,Temporal Behavioral Pattern,Temporal Embedding
+REGION_RATING_CLIENT_W_CITY,0.0017027928,REGION_RATING_CLIENT_W_CITY,Static Application
+tcn_emb_v2_35,0.0016897692,Temporal Behavioral Pattern,Temporal Embedding
+LANDAREA_MEDI_is_missing,0.0015015507,LANDAREA_MEDI_is_missing,Static Application
+tcn_emb_v2_18,0.0014772112,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_60,0.0014360949,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_9,0.0013726542,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_36,0.0013410503,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_14,0.0013090535,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_20,0.0012439557,Temporal Behavioral Pattern,Temporal Embedding
+YEARS_BEGINEXPLUATATION_AVG,0.0012414386,YEARS_BEGINEXPLUATATION_AVG,Static Application
+FLAG_OWN_REALTY_Y,0.0012338511,FLAG_OWN_REALTY_Y,Static Application
+OWN_CAR_AGE_is_missing,0.0012267096,OWN_CAR_AGE_is_missing,Static Application
+LIVINGAREA_AVG,0.0012193951,LIVINGAREA_AVG,Static Application
+ENTRANCES_AVG,0.0011753691,ENTRANCES_AVG,Static Application
+tcn_emb_v2_30,0.001144912,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_25,0.0011442333,Temporal Behavioral Pattern,Temporal Embedding
+tcn_emb_v2_6,0.0011179924,Temporal Behavioral Pattern,Temporal Embedding
+NAME_HOUSING_TYPE_Municipal_apartment,0.0011096977,NAME_HOUSING_TYPE_Municipal_apartment,Static Application
+EMERGENCYSTATE_MODE_is_missing,0.0010762416,EMERGENCYSTATE_MODE_is_missing,Static Application
+LIVINGAREA_MEDI_is_missing,0.0010605265,LIVINGAREA_MEDI_is_missing,Static Application
+tcn_emb_v2_31,0.0010204717,Temporal Behavioral Pattern,Temporal Embedding
+NONLIVINGAREA_AVG,0.0009942905,NONLIVINGAREA_AVG,Static Application
+tcn_emb_v2_3,0.0009929232,Temporal Behavioral Pattern,Temporal Embedding
+ENTRANCES_MEDI,0.0009840094,ENTRANCES_MEDI,Static Application
+NAME_TYPE_SUITE_Unaccompanied,0.0009405351,NAME_TYPE_SUITE_Unaccompanied,Static Application
+FLOORSMAX_AVG,0.00087138836,FLOORSMAX_AVG,Static Application
+ORGANIZATION_TYPE_School,0.0008455572,ORGANIZATION_TYPE_School,Static Application
+WEEKDAY_APPR_PROCESS_START_TUESDAY,0.0007682884,WEEKDAY_APPR_PROCESS_START_TUESDAY,Static Application
+LANDAREA_MODE,0.0007486508,LANDAREA_MODE,Static Application
+FONDKAPREMONT_MODE_org_spec_account,0.00072701013,FONDKAPREMONT_MODE_org_spec_account,Static Application
+NAME_EDUCATION_TYPE_Incomplete_higher,0.00069971866,NAME_EDUCATION_TYPE_Incomplete_higher,Static Application
+NAME_HOUSING_TYPE_House_apartment,0.00062330265,NAME_HOUSING_TYPE_House_apartment,Static Application
+OCCUPATION_TYPE_Core_staff,0.00061373465,OCCUPATION_TYPE_Core_staff,Static Application
+ORGANIZATION_TYPE_Transport_type_4,0.00058432587,ORGANIZATION_TYPE_Transport_type_4,Static Application
+LIVINGAPARTMENTS_AVG,0.0004172616,LIVINGAPARTMENTS_AVG,Static Application
+tcn_emb_v2_5,0.00035834755,Temporal Behavioral Pattern,Temporal Embedding
+NAME_CONTRACT_TYPE_Revolving_loans,0.0003279495,NAME_CONTRACT_TYPE_Revolving_loans,Static Application
+YEARS_BEGINEXPLUATATION_MODE_is_missing,0.00026015294,YEARS_BEGINEXPLUATATION_MODE_is_missing,Static Application
+ORGANIZATION_TYPE_Business_Entity_Type_3,0.00015998218,ORGANIZATION_TYPE_Business_Entity_Type_3,Static Application
 NONLIVINGAPARTMENTS_MODE,0.0,NONLIVINGAPARTMENTS_MODE,Static Application
+NAME_TYPE_SUITE_Family,0.0,NAME_TYPE_SUITE_Family,Static Application
+YEARS_BUILD_AVG_is_missing,0.0,YEARS_BUILD_AVG_is_missing,Static Application
 LIVE_REGION_NOT_WORK_REGION,0.0,LIVE_REGION_NOT_WORK_REGION,Static Application
+OCCUPATION_TYPE_Managers,0.0,OCCUPATION_TYPE_Managers,Static Application
+ORGANIZATION_TYPE_Medicine,0.0,ORGANIZATION_TYPE_Medicine,Static Application
 FLAG_DOCUMENT_8,0.0,FLAG_DOCUMENT_8,Static Application
-FLOORSMAX_MEDI,0.0,FLOORSMAX_MEDI,Static Application
 HOUSETYPE_MODE_is_missing,0.0,HOUSETYPE_MODE_is_missing,Static Application
 ORGANIZATION_TYPE_Business_Entity_Type_2,0.0,ORGANIZATION_TYPE_Business_Entity_Type_2,Static Application
-NAME_EDUCATION_TYPE_Incomplete_higher,0.0,NAME_EDUCATION_TYPE_Incomplete_higher,Static Application
-ORGANIZATION_TYPE_Medicine,0.0,ORGANIZATION_TYPE_Medicine,Static Application
-OCCUPATION_TYPE_Managers,0.0,OCCUPATION_TYPE_Managers,Static Application
-FLOORSMAX_MODE_is_missing,0.0,FLOORSMAX_MODE_is_missing,Static Application
-WEEKDAY_APPR_PROCESS_START_WEDNESDAY,0.0,WEEKDAY_APPR_PROCESS_START_WEDNESDAY,Static Application
+FLOORSMAX_MEDI,0.0,FLOORSMAX_MEDI,Static Application
+FONDKAPREMONT_MODE_reg_oper_account,0.0,FONDKAPREMONT_MODE_reg_oper_account,Static Application
+ORGANIZATION_TYPE_Other,0.0,ORGANIZATION_TYPE_Other,Static Application
+EXT_SOURCE_3_is_missing,0.0,EXT_SOURCE_3_is_missing,Static Application
 AMT_REQ_CREDIT_BUREAU_WEEK_is_missing,0.0,AMT_REQ_CREDIT_BUREAU_WEEK_is_missing,Static Application
+BASEMENTAREA_AVG_is_missing,0.0,BASEMENTAREA_AVG_is_missing,Static Application
 NONLIVINGAPARTMENTS_AVG,0.0,NONLIVINGAPARTMENTS_AVG,Static Application
 REG_CITY_NOT_LIVE_CITY,0.0,REG_CITY_NOT_LIVE_CITY,Static Application
+AMT_REQ_CREDIT_BUREAU_MON,0.0,AMT_REQ_CREDIT_BUREAU_MON,Static Application
+WEEKDAY_APPR_PROCESS_START_WEDNESDAY,0.0,WEEKDAY_APPR_PROCESS_START_WEDNESDAY,Static Application
 NONLIVINGAPARTMENTS_MEDI,0.0,NONLIVINGAPARTMENTS_MEDI,Static Application
-WEEKDAY_APPR_PROCESS_START_TUESDAY,0.0,WEEKDAY_APPR_PROCESS_START_TUESDAY,Static Application
-ORGANIZATION_TYPE_Other,0.0,ORGANIZATION_TYPE_Other,Static Application
-FONDKAPREMONT_MODE_reg_oper_account,0.0,FONDKAPREMONT_MODE_reg_oper_account,Static Application
-FLAG_WORK_PHONE,0.0,FLAG_WORK_PHONE,Static Application
+FLOORSMAX_MODE_is_missing,0.0,FLOORSMAX_MODE_is_missing,Static Application
+FLOORSMAX_MODE,0.0,FLOORSMAX_MODE,Static Application
+WEEKDAY_APPR_PROCESS_START_THURSDAY,0.0,WEEKDAY_APPR_PROCESS_START_THURSDAY,Static Application
 NAME_TYPE_SUITE_Other_B,0.0,NAME_TYPE_SUITE_Other_B,Static Application
-ORGANIZATION_TYPE_Industry_type_11,0.0,ORGANIZATION_TYPE_Industry_type_11,Static Application
-YEARS_BEGINEXPLUATATION_MODE_is_missing,0.0,YEARS_BEGINEXPLUATATION_MODE_is_missing,Static Application
+FLAG_WORK_PHONE,0.0,FLAG_WORK_PHONE,Static Application
 ORGANIZATION_TYPE_Police,0.0,ORGANIZATION_TYPE_Police,Static Application
-ORGANIZATION_TYPE_Kindergarten,0.0,ORGANIZATION_TYPE_Kindergarten,Static Application
-ORGANIZATION_TYPE_School,0.0,ORGANIZATION_TYPE_School,Static Application
 ORGANIZATION_TYPE_Postal,0.0,ORGANIZATION_TYPE_Postal,Static Application
+ORGANIZATION_TYPE_Kindergarten,0.0,ORGANIZATION_TYPE_Kindergarten,Static Application
+ORGANIZATION_TYPE_Industry_type_11,0.0,ORGANIZATION_TYPE_Industry_type_11,Static Application
 APARTMENTS_AVG_is_missing,0.0,APARTMENTS_AVG_is_missing,Static Application
-ELEVATORS_MEDI,0.0,ELEVATORS_MEDI,Static Application
-WALLSMATERIAL_MODE_Panel,0.0,WALLSMATERIAL_MODE_Panel,Static Application
-LIVINGAREA_MODE_is_missing,0.0,LIVINGAREA_MODE_is_missing,Static Application
 ORGANIZATION_TYPE_Self_employed,0.0,ORGANIZATION_TYPE_Self_employed,Static Application
 FLAG_DOCUMENT_5,0.0,FLAG_DOCUMENT_5,Static Application
-ORGANIZATION_TYPE_Services,0.0,ORGANIZATION_TYPE_Services,Static Application
+WALLSMATERIAL_MODE_Panel,0.0,WALLSMATERIAL_MODE_Panel,Static Application
+LIVINGAREA_MODE_is_missing,0.0,LIVINGAREA_MODE_is_missing,Static Application
+WEEKDAY_APPR_PROCESS_START_SATURDAY,0.0,WEEKDAY_APPR_PROCESS_START_SATURDAY,Static Application
+ORGANIZATION_TYPE_Security,0.0,ORGANIZATION_TYPE_Security,Static Application
+ELEVATORS_MEDI,0.0,ELEVATORS_MEDI,Static Application
 OCCUPATION_TYPE_Cleaning_staff,0.0,OCCUPATION_TYPE_Cleaning_staff,Static Application
 AMT_REQ_CREDIT_BUREAU_HOUR_is_missing,0.0,AMT_REQ_CREDIT_BUREAU_HOUR_is_missing,Static Application
+OCCUPATION_TYPE_Laborers,0.0,OCCUPATION_TYPE_Laborers,Static Application
+NAME_HOUSING_TYPE_With_parents,0.0,NAME_HOUSING_TYPE_With_parents,Static Application
 ELEVATORS_MODE,0.0,ELEVATORS_MODE,Static Application
-ORGANIZATION_TYPE_Security,0.0,ORGANIZATION_TYPE_Security,Static Application
-WEEKDAY_APPR_PROCESS_START_SATURDAY,0.0,WEEKDAY_APPR_PROCESS_START_SATURDAY,Static Application
 OCCUPATION_TYPE_Low_skill_Laborers,0.0,OCCUPATION_TYPE_Low_skill_Laborers,Static Application
+ENTRANCES_MODE,0.0,ENTRANCES_MODE,Static Application
 COMMONAREA_AVG_is_missing,0.0,COMMONAREA_AVG_is_missing,Static Application
-ORGANIZATION_TYPE_Transport_type_4,0.0,ORGANIZATION_TYPE_Transport_type_4,Static Application
 NAME_FAMILY_STATUS_Single_not_married,0.0,NAME_FAMILY_STATUS_Single_not_married,Static Application
 FONDKAPREMONT_MODE_reg_oper_spec_account,0.0,FONDKAPREMONT_MODE_reg_oper_spec_account,Static Application
-ELEVATORS_AVG,0.0,ELEVATORS_AVG,Static Application
-OCCUPATION_TYPE_is_missing,0.0,OCCUPATION_TYPE_is_missing,Static Application
 NONLIVINGAREA_MODE_is_missing,0.0,NONLIVINGAREA_MODE_is_missing,Static Application
-tcn_emb_v2_16,0.0,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_5,0.0,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_37,0.0,Temporal Behavioral Pattern,Temporal Embedding
-tcn_emb_v2_51,0.0,Temporal Behavioral Pattern,Temporal Embedding
+LANDAREA_MEDI,0.0,LANDAREA_MEDI,Static Application
+OCCUPATION_TYPE_is_missing,0.0,OCCUPATION_TYPE_is_missing,Static Application
+ELEVATORS_AVG,0.0,ELEVATORS_AVG,Static Application
+FLAG_DOCUMENT_6,0.0,FLAG_DOCUMENT_6,Static Application
+ORGANIZATION_TYPE_Services,0.0,ORGANIZATION_TYPE_Services,Static Application
+tcn_emb_v2_59,0.0,Temporal Behavioral Pattern,Temporal Embedding
