@@ -373,7 +373,7 @@ def score_borrower(static_processed, embedding, xgb_model, platt, emb_cols):
     return raw_pd, calibrated_pd
 
 
-ddef assign_credit_grade_from_summary(pd_value: float, grade_summary: pd.DataFrame = None) -> str:
+def assign_credit_grade_from_summary(pd_value: float, grade_summary: pd.DataFrame = None) -> str:
     """
     Assign credit grade using a fixed business-friendly PD scale.
 
