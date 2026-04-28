@@ -1,69 +1,53 @@
-import sys
-from pathlib import Path
-
-APP_DIR = Path(__file__).resolve().parents[1]
-if str(APP_DIR) not in sys.path:
-    sys.path.append(str(APP_DIR))
-
-import streamlit as st
 import pandas as pd
 import plotly.express as px
+import streamlit as st
 
-<<<<<<< HEAD
-from utils import load_data_objects, format_pd
-=======
-from utils import format_pct, format_pd, load_data_objects
->>>>>>> 25e2c74 (Update web streamlit)
+from utils import format_pct, load_data_objects
 
-st.title("🚨 High-Risk Watchlist")
+st.set_page_config(page_title="High-Risk Watchlist", layout="wide")
 
 data = load_data_objects()
-<<<<<<< HEAD
-=======
-
 risk_table = data["risk_table"].copy()
-top_high_risk = data["top_high_risk"].copy()
->>>>>>> 25e2c74 (Update web streamlit)
 
-risk_table = data["risk_table"]
-
-# FILTER
-threshold = st.slider("Minimum Calibrated PD", 0.0, 1.0, 0.10)
-
-filtered = risk_table[risk_table["pd_calibrated"] >= threshold]
-
-st.write(f"Borrowers above threshold: {len(filtered)}")
-
-# TABLE
-st.dataframe(filtered.head(50))
-
-# DISTRIBUTION
-st.subheader("Risk Distribution")
-
-col1, col2 = st.columns(2)
-
-fig_grade = px.histogram(
-    filtered,
-    x="credit_grade",
-    title="Grade Distribution"
+st.markdown(
+    """
+    <style>
+        .block-container {
+            max-width: 1400px;
+        }
+        .section-note {
+            color: #B9C0CB;
+            font-size: 0.97rem;
+            margin-top: -0.2rem;
+            margin-bottom: 1rem;
+        }
+        .action-box {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 1rem 1rem 0.75rem 1rem;
+            margin-bottom: 0.8rem;
+        }
+        .pill {
+            display: inline-block;
+            padding: 0.36rem 0.7rem;
+            border-radius: 999px;
+            margin-right: 0.45rem;
+            margin-bottom: 0.4rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.9rem;
+            color: #D9DEE7;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
 )
-col1.plotly_chart(fig_grade, use_container_width=True, key="watchlist_grade")
 
-<<<<<<< HEAD
-fig_pd = px.histogram(
-    filtered,
-    x="pd_calibrated",
-    nbins=30,
-    title="PD Distribution"
-)
-col2.plotly_chart(fig_pd, use_container_width=True, key="watchlist_pd")
-=======
 st.title("High-Risk Watchlist")
 st.caption(
     "Operational review list for borrowers with elevated estimated repayment risk."
 )
-
-# Safety Checks
 
 required_cols = [
     "SK_ID_CURR",
@@ -83,7 +67,6 @@ if missing_cols:
     )
     st.stop()
 
-# Backward-compatible risk priority flag
 if "risk_priority_flag" not in risk_table.columns:
     def make_priority(row):
         grade = str(row.get("credit_grade", ""))
@@ -99,12 +82,9 @@ if "risk_priority_flag" not in risk_table.columns:
 
     risk_table["risk_priority_flag"] = risk_table.apply(make_priority, axis=1)
 
-# Normalize grade labels if the old system uses C instead of CCC/CC
 risk_table["credit_grade"] = risk_table["credit_grade"].astype(str)
 risk_table["decision_recommendation"] = risk_table["decision_recommendation"].astype(str)
 risk_table["risk_priority_flag"] = risk_table["risk_priority_flag"].astype(str)
-
-# Review Filters
 
 st.markdown("### Review Filters")
 st.caption(
@@ -132,7 +112,6 @@ top_n = f2.slider(
     max_value=300,
     value=50,
     step=10,
-    help="Limits how many borrowers are shown in the table after applying filters.",
 )
 
 grade_order = ["AAA", "AA", "A", "BBB", "BB", "B", "CCC", "CC", "C", "D"]
@@ -145,7 +124,6 @@ selected_grades = f3.multiselect(
     "Credit grade",
     options=grade_options,
     default=grade_options,
-    help="Filter borrowers by credit grade. Lower grades generally indicate higher credit risk.",
 )
 
 priority_order = [
@@ -164,19 +142,12 @@ selected_priorities = f4.multiselect(
     "Review priority",
     options=priority_options,
     default=priority_options,
-    help="Filter borrowers by operational review priority.",
 )
 
 show_defaults_only = st.checkbox(
     "Show only borrowers who actually had repayment difficulty in the test data",
     value=False,
-    help=(
-        "This is only available for back-testing because the dataset already contains the observed outcome. "
-        "In a live system, this field would not be known at scoring time."
-    ),
 )
-
-# Filter Data
 
 filtered = risk_table.copy()
 
@@ -196,8 +167,6 @@ if filtered.empty:
     st.warning("No borrowers match the current filter settings.")
     st.stop()
 
-# KPI Row
-
 st.markdown("### Review List Summary")
 
 k1, k2, k3, k4, k5 = st.columns(5)
@@ -212,8 +181,6 @@ k5.metric(
     "High-Risk Grade Count",
     f"{int(filtered['credit_grade'].isin(high_risk_grades).sum()):,}",
 )
-
-# Severity Visuals
 
 c1, c2 = st.columns(2)
 
@@ -274,8 +241,6 @@ with c2:
     )
     st.plotly_chart(fig_hist, use_container_width=True)
 
-# Operational Priorities
-
 st.markdown("### Operational Priorities")
 
 priority_counts = (
@@ -330,8 +295,6 @@ with a3:
         unsafe_allow_html=True,
     )
 
-# Review Table
-
 st.markdown("### Borrower Review Table")
 st.markdown(
     '<div class="section-note">Filtered borrower list sorted by highest estimated default risk.</div>',
@@ -380,8 +343,6 @@ if "Observed Difficulty" in watchlist_table.columns:
 
 st.dataframe(watchlist_table, use_container_width=True, hide_index=True)
 
-# Interpretation Note
-
 with st.expander("How to interpret this page"):
     st.markdown(
         """
@@ -396,4 +357,3 @@ with st.expander("How to interpret this page"):
         **Observed difficulty** is only available because this is a back-testing dataset. In a real deployment, this outcome would not be known at the time of scoring.
         """
     )
->>>>>>> 25e2c74 (Update web streamlit)

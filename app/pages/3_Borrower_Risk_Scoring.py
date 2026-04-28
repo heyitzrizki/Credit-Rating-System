@@ -1,28 +1,16 @@
-import sys
-from pathlib import Path
-
-APP_DIR = Path(__file__).resolve().parents[1]
-if str(APP_DIR) not in sys.path:
-    sys.path.append(str(APP_DIR))
 import pandas as pd
 import streamlit as st
 
 from utils import (
     assign_credit_grade_from_summary,
     assign_decision_from_grade,
-<<<<<<< HEAD
-    load_data_objects,
-)
-
-from model_utils import (
-=======
     assign_grade_group,
->>>>>>> 25e2c74 (Update web streamlit)
     build_existing_borrower_sequence,
     build_temporal_preset,
     format_currency,
     format_pct,
     get_tcn_embedding,
+    load_data_objects,
     load_models,
     preprocess_static_row,
     score_borrower,
@@ -112,8 +100,6 @@ mode = st.radio(
 )
 
 
-# Helper functions
-
 def fmt_num(x, digits=2):
     if pd.isna(x):
         return "-"
@@ -158,7 +144,7 @@ def render_profile_card(profile_row: pd.Series):
         st.markdown('<div class="section-card"><div class="section-title">Financial Profile</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="profile-label">Income</div><div class="profile-value">{format_currency(profile_row.get("AMT_INCOME_TOTAL"))}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="profile-label">Credit Amount</div><div class="profile-value">{format_currency(profile_row.get("AMT_CREDIT"))}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Annuity</div><div class="profile-value">{format_currency(profile_row.get("AMT_ANNUITY"))}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="profile-label">Regular Payment</div><div class="profile-value">{format_currency(profile_row.get("AMT_ANNUITY"))}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="profile-label">Goods Price</div><div class="profile-value">{format_currency(profile_row.get("AMT_GOODS_PRICE"))}</div>', unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -167,7 +153,7 @@ def render_profile_card(profile_row: pd.Series):
         st.markdown(f'<div class="profile-label">Family Status</div><div class="profile-value">{profile_row.get("NAME_FAMILY_STATUS", "-")}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="profile-label">Children</div><div class="profile-value">{profile_row.get("CNT_CHILDREN", "-")}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="profile-label">Own Car</div><div class="profile-value">{flag_to_yes_no(profile_row.get("FLAG_OWN_CAR", "N"))}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Own Realty</div><div class="profile-value">{flag_to_yes_no(profile_row.get("FLAG_OWN_REALTY", "N"))}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="profile-label">Own Property</div><div class="profile-value">{flag_to_yes_no(profile_row.get("FLAG_OWN_REALTY", "N"))}</div>', unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c4:
@@ -275,6 +261,10 @@ def render_result_summary(raw_pd, calibrated_pd, credit_grade, decision, grade_g
     m4.metric("Recommendation", decision)
     m5.metric("Risk Segment", grade_group)
 
+    observed_text = ""
+    if actual_default is not None:
+        observed_text = f"<br><br>Observed outcome in test data: <b>{actual_default}</b>."
+
     st.markdown(
         f"""
         <div class="footnote-box">
@@ -282,14 +272,12 @@ def render_result_summary(raw_pd, calibrated_pd, credit_grade, decision, grade_g
             The system estimates the borrower's probability of repayment difficulty and converts it into a
             credit grade. This borrower is assigned to <b>{credit_grade}</b>, categorized as
             <b>{grade_group}</b>, with a recommended action of <b>{decision}</b>.
-            {"<br><br>Observed outcome in test data: <b>" + str(actual_default) + "</b>." if actual_default is not None else ""}
+            {observed_text}
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-
-# Existing Borrower Mode
 
 if mode == "Existing Borrower":
     st.markdown("### Existing Borrower Assessment")
@@ -368,9 +356,6 @@ if mode == "Existing Borrower":
         )
         st.dataframe(attn_df, use_container_width=True, hide_index=True)
 
-
-# Manual Simulation Mode
-
 else:
     st.markdown("### Manual Borrower Simulation")
     st.caption(
@@ -400,11 +385,10 @@ else:
         f1, f2 = st.columns(2)
 
         income = f1.number_input(
-            "Monthly / annual income amount",
+            "Income amount",
             min_value=0.0,
             value=float(template_row.iloc[0].get("AMT_INCOME_TOTAL", 0) or 0),
             step=1000.0,
-            help="Borrower's declared income amount from the application data.",
         )
 
         credit_amount = f2.number_input(
@@ -412,15 +396,13 @@ else:
             min_value=0.0,
             value=float(template_row.iloc[0].get("AMT_CREDIT", 0) or 0),
             step=1000.0,
-            help="Total credit amount requested or approved.",
         )
 
         annuity = f1.number_input(
-            "Regular payment / annuity amount",
+            "Regular payment amount",
             min_value=0.0,
             value=float(template_row.iloc[0].get("AMT_ANNUITY", 0) or 0),
             step=100.0,
-            help="Regular repayment obligation associated with the loan.",
         )
 
         goods_price = f2.number_input(
@@ -428,7 +410,6 @@ else:
             min_value=0.0,
             value=float(template_row.iloc[0].get("AMT_GOODS_PRICE", 0) or 0),
             step=1000.0,
-            help="Price of the goods linked to the credit application, if applicable.",
         )
 
         st.markdown("#### Personal and Employment Profile")
@@ -445,7 +426,6 @@ else:
             max_value=80.0,
             value=float(round(current_age, 1)),
             step=1.0,
-            help="Borrower's age in years. The app converts this into the model's original day-based format internally.",
         )
 
         current_employment = years_from_negative_days(template_row.iloc[0].get("DAYS_EMPLOYED"))
@@ -458,7 +438,6 @@ else:
             max_value=50.0,
             value=float(round(current_employment, 1)),
             step=0.5,
-            help="Approximate number of years the borrower has been employed.",
         )
 
         children = p1.number_input(
@@ -479,6 +458,10 @@ else:
                 return vals if vals else fallback
             return fallback
 
+        def option_index(options, value):
+            value = str(value)
+            return options.index(value) if value in options else 0
+
         gender_options = safe_options("CODE_GENDER", ["F", "M"])
         income_type_options = safe_options("NAME_INCOME_TYPE", ["Working", "Commercial associate", "Pensioner"])
         education_options = safe_options("NAME_EDUCATION_TYPE", ["Secondary / secondary special", "Higher education"])
@@ -487,25 +470,25 @@ else:
         gender = c1.selectbox(
             "Gender",
             options=gender_options,
-            index=gender_options.index(str(template_row.iloc[0].get("CODE_GENDER"))) if str(template_row.iloc[0].get("CODE_GENDER")) in gender_options else 0,
+            index=option_index(gender_options, template_row.iloc[0].get("CODE_GENDER")),
         )
 
         income_type = c2.selectbox(
             "Income type",
             options=income_type_options,
-            index=income_type_options.index(str(template_row.iloc[0].get("NAME_INCOME_TYPE"))) if str(template_row.iloc[0].get("NAME_INCOME_TYPE")) in income_type_options else 0,
+            index=option_index(income_type_options, template_row.iloc[0].get("NAME_INCOME_TYPE")),
         )
 
         education_type = c1.selectbox(
             "Education level",
             options=education_options,
-            index=education_options.index(str(template_row.iloc[0].get("NAME_EDUCATION_TYPE"))) if str(template_row.iloc[0].get("NAME_EDUCATION_TYPE")) in education_options else 0,
+            index=option_index(education_options, template_row.iloc[0].get("NAME_EDUCATION_TYPE")),
         )
 
         family_status = c2.selectbox(
             "Family status",
             options=family_options,
-            index=family_options.index(str(template_row.iloc[0].get("NAME_FAMILY_STATUS"))) if str(template_row.iloc[0].get("NAME_FAMILY_STATUS")) in family_options else 0,
+            index=option_index(family_options, template_row.iloc[0].get("NAME_FAMILY_STATUS")),
         )
 
         owns_car = c1.selectbox(
@@ -515,7 +498,7 @@ else:
         )
 
         owns_realty = c2.selectbox(
-            "Owns real estate",
+            "Owns property",
             options=["Yes", "No"],
             index=0 if str(template_row.iloc[0].get("FLAG_OWN_REALTY", "N")).upper() == "Y" else 1,
         )
@@ -528,9 +511,6 @@ else:
                 "High delinquency",
                 "Recovering borrower",
             ],
-            help=(
-                "This simplified preset controls the simulated 12-month repayment behavior used by the temporal model."
-            ),
         )
 
         submitted = st.form_submit_button("Score borrower")
@@ -562,7 +542,7 @@ else:
 
         static_processed = preprocess_static_row(static_raw, data)
         seq, mask = build_temporal_preset(data, temporal_preset)
-        embedding, attn = get_tcn_embedding(encoder, seq, mask)
+        embedding, _ = get_tcn_embedding(encoder, seq, mask)
 
         raw_pd, calibrated_pd = score_borrower(
             static_processed,
@@ -596,10 +576,6 @@ else:
             "D": 0.70,
         }.get(credit_grade, 0.55)
 
-<<<<<<< HEAD
-        with st.expander("Show edited borrower inputs"):
-            st.dataframe(edited_row, use_container_width=True, hide_index=True)
-=======
         ead = credit_amount
         ecl = calibrated_pd * lgd * ead
 
@@ -614,4 +590,3 @@ else:
                 [{"Field": k, "Internal Model Value": v} for k, v in editable_updates.items()]
             )
             st.dataframe(display_updates, use_container_width=True, hide_index=True)
->>>>>>> 25e2c74 (Update web streamlit)

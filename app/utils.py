@@ -1,19 +1,20 @@
 import json
+import pickle
+import re
 from pathlib import Path
 
 import joblib
+import numpy as np
 import pandas as pd
 import streamlit as st
+import torch
+import torch.nn as nn
 
 
 APP_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = APP_DIR.parent
 ARTIFACT_DIR = PROJECT_ROOT / "artifacts"
 
-
-<<<<<<< HEAD
-=======
-# Deep Learning Architecture
 
 class Chomp1d(nn.Module):
     def __init__(self, chomp_size: int):
@@ -142,16 +143,9 @@ class TCNEncoder(nn.Module):
         return embedding, attn_weights, h
 
 
-# Artifact Loading
-
 def read_optional_csv(filename: str) -> pd.DataFrame:
     path = ARTIFACT_DIR / filename
     return pd.read_csv(path) if path.exists() else pd.DataFrame()
-
-
-def read_optional_joblib(filename: str):
-    path = ARTIFACT_DIR / filename
-    return joblib.load(path) if path.exists() else None
 
 
 @st.cache_resource
@@ -170,7 +164,6 @@ def load_models():
     return xgb_model, platt, encoder, tcn_config
 
 
->>>>>>> 25e2c74 (Update web streamlit)
 @st.cache_data
 def load_data_objects():
     metadata_path = ARTIFACT_DIR / "deployment_metadata.json"
@@ -179,7 +172,6 @@ def load_data_objects():
         metadata = json.load(f)
 
     data = {
-        # Core artifacts
         "app_static": pd.read_csv(ARTIFACT_DIR / "app_static_aligned.csv"),
         "seq_panel": pd.read_csv(ARTIFACT_DIR / "seq_panel_v2.csv"),
         "risk_table": pd.read_csv(ARTIFACT_DIR / "risk_table_test_set.csv"),
@@ -190,22 +182,16 @@ def load_data_objects():
         "executive_summary": pd.read_csv(ARTIFACT_DIR / "executive_summary.csv"),
         "grade_group_summary": pd.read_csv(ARTIFACT_DIR / "grade_group_summary.csv"),
         "borrower_profile_ui": pd.read_csv(ARTIFACT_DIR / "borrower_profile_ui.csv"),
-
-        # ECL and macro stress testing artifacts
         "portfolio_ecl_base": read_optional_csv("portfolio_ecl_base.csv"),
         "ecl_grade_summary": read_optional_csv("ecl_grade_summary.csv"),
         "macro_stress_summary": read_optional_csv("macro_stress_summary.csv"),
         "portfolio_ecl_severe_downturn": read_optional_csv("portfolio_ecl_severe_downturn.csv"),
-
-        # Model preprocessing artifacts
         "selected_static_features": joblib.load(ARTIFACT_DIR / "selected_static_features.joblib"),
         "static_feature_columns": joblib.load(ARTIFACT_DIR / "static_feature_columns.joblib"),
         "num_impute_values": joblib.load(ARTIFACT_DIR / "num_impute_values.joblib"),
         "cat_impute_values": joblib.load(ARTIFACT_DIR / "cat_impute_values.joblib"),
         "temporal_feature_cols_v2": joblib.load(ARTIFACT_DIR / "temporal_feature_cols_v2.joblib"),
         "emb_cols_v2": joblib.load(ARTIFACT_DIR / "embedding_cols_v2.joblib"),
-
-        # Metadata
         "metadata": metadata,
     }
 
@@ -221,48 +207,6 @@ def load_data_objects():
 
     return data
 
-
-<<<<<<< HEAD
-def assign_credit_grade_from_summary(pd_value: float, grade_summary: pd.DataFrame) -> str:
-    grade_summary = grade_summary.copy()
-    grade_summary["credit_grade"] = grade_summary["credit_grade"].astype(str)
-
-    for _, row in grade_summary.iterrows():
-        if row["min_pd"] <= pd_value <= row["max_pd"]:
-            return row["credit_grade"]
-
-    if pd_value < grade_summary["min_pd"].min():
-        return grade_summary.sort_values("min_pd").iloc[0]["credit_grade"]
-
-    return grade_summary.sort_values("max_pd").iloc[-1]["credit_grade"]
-
-
-def assign_decision_from_grade(credit_grade: str) -> str:
-    mapping = {
-        "AAA": "Approve",
-        "AA": "Approve",
-        "A": "Approve",
-        "BBB": "Review",
-        "BB": "Review",
-        "B": "Reject",
-        "C": "Reject",
-        "D": "Reject",
-    }
-    return mapping.get(str(credit_grade), "Review")
-
-
-def format_pct(value: float, digits: int = 1) -> str:
-    if pd.isna(value):
-        return "-"
-    return f"{value * 100:.{digits}f}%"
-
-
-def format_pd(value: float, digits: int = 4) -> str:
-    if pd.isna(value):
-        return "-"
-    return f"{value:.{digits}f}"
-=======
-# Formatting Helpers
 
 def format_pct(x, decimals: int = 1) -> str:
     if pd.isna(x):
@@ -287,14 +231,6 @@ def format_number(x, decimals: int = 0) -> str:
         return "-"
     return f"{x:,.{decimals}f}"
 
-
-def format_multiplier(x, decimals: int = 2) -> str:
-    if pd.isna(x):
-        return "-"
-    return f"{x:.{decimals}f}x"
-
-
-# Preprocessing and Scoring Helpers
 
 def sanitize_feature_names(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
@@ -437,8 +373,6 @@ def score_borrower(static_processed, embedding, xgb_model, platt, emb_cols):
     return raw_pd, calibrated_pd
 
 
-# Rating and Decision Helpers
-
 def assign_credit_grade_from_summary(pd_value: float, grade_summary: pd.DataFrame) -> str:
     grade_summary = grade_summary.copy()
 
@@ -447,7 +381,6 @@ def assign_credit_grade_from_summary(pd_value: float, grade_summary: pd.DataFram
             if row["min_pd"] <= pd_value <= row["max_pd"]:
                 return str(row["credit_grade"])
 
-    # Fallback rule if summary thresholds are unavailable
     if pd_value <= 0.01:
         return "AAA"
     if pd_value <= 0.02:
@@ -496,4 +429,3 @@ def lgd_from_grade(grade: str) -> float:
         "D": 0.70,
     }
     return lgd_map.get(str(grade), np.nan)
->>>>>>> 25e2c74 (Update web streamlit)
