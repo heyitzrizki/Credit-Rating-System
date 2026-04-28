@@ -6,7 +6,6 @@ from utils import (
     assign_decision_from_grade,
     assign_grade_group,
     build_existing_borrower_sequence,
-    build_temporal_preset,
     format_currency,
     format_pct,
     get_tcn_embedding,
@@ -16,7 +15,7 @@ from utils import (
     score_borrower,
 )
 
-st.set_page_config(page_title="Borrower Rating & Decisioning", layout="wide")
+st.set_page_config(page_title="Borrower Rating & Stress Scenario", layout="wide")
 
 xgb_model, platt, encoder, _ = load_models()
 data = load_data_objects()
@@ -79,26 +78,28 @@ st.markdown(
             margin-top: 0.5rem;
             margin-bottom: 1rem;
         }
+        .warning-box {
+            background: rgba(255, 193, 7, 0.08);
+            border: 1px solid rgba(255, 193, 7, 0.22);
+            border-radius: 14px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #F4E4B3;
+        }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-st.title("Borrower Rating & Decisioning")
+st.title("Borrower Rating & Stress Scenario")
 st.caption(
-    "Assess an individual borrower using estimated default risk, credit grade, recommendation, and main risk drivers."
+    "Review an existing borrower’s credit rating, then apply stress assumptions to see how risk, rating, and expected loss may change."
 )
 
-mode = st.radio(
-    "Choose scoring mode",
-    ["Existing Borrower", "Manual Simulation"],
-    horizontal=True,
-    help=(
-        "Existing Borrower uses borrowers already available in the test portfolio. "
-        "Manual Simulation lets you modify a borrower profile and test the system response."
-    ),
-)
 
+# ============================================================
+# Helper functions
+# ============================================================
 
 def fmt_num(x, digits=2):
     if pd.isna(x):
@@ -112,18 +113,91 @@ def years_from_negative_days(x):
     return abs(float(x)) / 365.25
 
 
-def negative_days_from_years(x):
-    if pd.isna(x):
-        return None
-    return -int(float(x) * 365.25)
-
-
-def yes_no_to_flag(label):
-    return "Y" if label == "Yes" else "N"
-
-
 def flag_to_yes_no(value):
     return "Yes" if str(value).upper() == "Y" else "No"
+
+
+def lgd_by_grade(grade: str) -> float:
+    mapping = {
+        "AAA": 0.25,
+        "AA": 0.25,
+        "A": 0.25,
+        "BBB": 0.40,
+        "BB": 0.40,
+        "B": 0.55,
+        "CCC": 0.55,
+        "CC": 0.70,
+        "C": 0.70,
+        "D": 0.70,
+    }
+    return mapping.get(str(grade), 0.55)
+
+
+def apply_borrower_stress(
+    base_pd: float,
+    income_decline_pct: float,
+    exposure_increase_pct: float,
+    employment_stress: str,
+    repayment_stress: str,
+) -> tuple[float, float]:
+    """
+    Apply scenario-based stress assumptions to borrower-level estimated default risk.
+
+    This is not a newly trained model. It is a what-if overlay on top of the existing borrower rating.
+    """
+    multiplier = 1.0
+
+    # Income stress: higher income decline increases repayment pressure
+    multiplier *= 1 + (income_decline_pct / 100) * 1.20
+
+    # Exposure stress: higher exposure relative to baseline increases risk pressure
+    multiplier *= 1 + (exposure_increase_pct / 100) * 0.80
+
+    employment_multiplier = {
+        "No change": 1.00,
+        "Mild instability": 1.15,
+        "Job transition / unstable income": 1.35,
+        "Unemployed / income interruption": 1.70,
+    }
+
+    repayment_multiplier = {
+        "No change": 1.00,
+        "Mild deterioration": 1.25,
+        "Repeated late payments": 1.70,
+        "Severe delinquency": 2.40,
+    }
+
+    multiplier *= employment_multiplier.get(employment_stress, 1.00)
+    multiplier *= repayment_multiplier.get(repayment_stress, 1.00)
+
+    stressed_pd = min(base_pd * multiplier, 0.95)
+
+    return stressed_pd, multiplier
+
+
+def get_existing_borrower_score(selected_borrower):
+    borrower_row_full = data["app_static"][
+        data["app_static"]["SK_ID_CURR"] == selected_borrower
+    ].copy()
+
+    static_raw = borrower_row_full.drop(
+        columns=[c for c in ["SK_ID_CURR", "TARGET"] if c in borrower_row_full.columns]
+    )
+
+    static_processed = preprocess_static_row(static_raw, data)
+
+    seq, mask = build_existing_borrower_sequence(selected_borrower, data)
+    embedding, attn = get_tcn_embedding(encoder, seq, mask)
+
+    raw_pd, calibrated_pd = score_borrower(
+        static_processed,
+        embedding,
+        xgb_model,
+        platt,
+        data["emb_cols_v2"],
+    )
+
+    return raw_pd, calibrated_pd, attn
 
 
 def render_profile_card(profile_row: pd.Series):
@@ -133,35 +207,95 @@ def render_profile_card(profile_row: pd.Series):
     c1, c2, c3, c4 = st.columns(4)
 
     with c1:
-        st.markdown('<div class="section-card"><div class="section-title">Identity & Application</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Borrower ID</div><div class="profile-value">{profile_row.get("SK_ID_CURR", "-")}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Contract Type</div><div class="profile-value">{profile_row.get("NAME_CONTRACT_TYPE", "-")}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Gender</div><div class="profile-value">{profile_row.get("CODE_GENDER", "-")}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Age</div><div class="profile-value">{fmt_num(age, 1)} years</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="section-card"><div class="section-title">Identity & Application</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Borrower ID</div><div class="profile-value">{profile_row.get("SK_ID_CURR", "-")}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Contract Type</div><div class="profile-value">{profile_row.get("NAME_CONTRACT_TYPE", "-")}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Gender</div><div class="profile-value">{profile_row.get("CODE_GENDER", "-")}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Age</div><div class="profile-value">{fmt_num(age, 1)} years</div>',
+            unsafe_allow_html=True,
+        )
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c2:
-        st.markdown('<div class="section-card"><div class="section-title">Financial Profile</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Income</div><div class="profile-value">{format_currency(profile_row.get("AMT_INCOME_TOTAL"))}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Credit Amount</div><div class="profile-value">{format_currency(profile_row.get("AMT_CREDIT"))}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Regular Payment</div><div class="profile-value">{format_currency(profile_row.get("AMT_ANNUITY"))}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Goods Price</div><div class="profile-value">{format_currency(profile_row.get("AMT_GOODS_PRICE"))}</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="section-card"><div class="section-title">Financial Profile</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Income</div><div class="profile-value">{format_currency(profile_row.get("AMT_INCOME_TOTAL"))}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Credit Amount</div><div class="profile-value">{format_currency(profile_row.get("AMT_CREDIT"))}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Regular Payment</div><div class="profile-value">{format_currency(profile_row.get("AMT_ANNUITY"))}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Goods Price</div><div class="profile-value">{format_currency(profile_row.get("AMT_GOODS_PRICE"))}</div>',
+            unsafe_allow_html=True,
+        )
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c3:
-        st.markdown('<div class="section-card"><div class="section-title">Household & Stability</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Family Status</div><div class="profile-value">{profile_row.get("NAME_FAMILY_STATUS", "-")}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Children</div><div class="profile-value">{profile_row.get("CNT_CHILDREN", "-")}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Own Car</div><div class="profile-value">{flag_to_yes_no(profile_row.get("FLAG_OWN_CAR", "N"))}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Own Property</div><div class="profile-value">{flag_to_yes_no(profile_row.get("FLAG_OWN_REALTY", "N"))}</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="section-card"><div class="section-title">Household & Stability</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Family Status</div><div class="profile-value">{profile_row.get("NAME_FAMILY_STATUS", "-")}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Children</div><div class="profile-value">{profile_row.get("CNT_CHILDREN", "-")}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Own Car</div><div class="profile-value">{flag_to_yes_no(profile_row.get("FLAG_OWN_CAR", "N"))}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Own Property</div><div class="profile-value">{flag_to_yes_no(profile_row.get("FLAG_OWN_REALTY", "N"))}</div>',
+            unsafe_allow_html=True,
+        )
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c4:
-        st.markdown('<div class="section-card"><div class="section-title">External Risk Signals</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">External Score 1</div><div class="profile-value">{fmt_num(profile_row.get("EXT_SOURCE_1"), 3)}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">External Score 2</div><div class="profile-value">{fmt_num(profile_row.get("EXT_SOURCE_2"), 3)}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">External Score 3</div><div class="profile-value">{fmt_num(profile_row.get("EXT_SOURCE_3"), 3)}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="profile-label">Employment Length</div><div class="profile-value">{fmt_num(employment_years, 1)} years</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="section-card"><div class="section-title">External Risk Signals</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">External Score 1</div><div class="profile-value">{fmt_num(profile_row.get("EXT_SOURCE_1"), 3)}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">External Score 2</div><div class="profile-value">{fmt_num(profile_row.get("EXT_SOURCE_2"), 3)}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">External Score 3</div><div class="profile-value">{fmt_num(profile_row.get("EXT_SOURCE_3"), 3)}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="profile-label">Employment Length</div><div class="profile-value">{fmt_num(employment_years, 1)} years</div>',
+            unsafe_allow_html=True,
+        )
         st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -207,10 +341,17 @@ def render_explanation_block(sk_id):
             """,
             unsafe_allow_html=True,
         )
+
+        found = False
         for col in ["top_1_risk_driver", "top_2_risk_driver", "top_3_risk_driver"]:
             val = explain_row.get(col, None)
             if pd.notna(val) and val is not None:
+                found = True
                 st.markdown(f'<span class="pill">{val}</span>', unsafe_allow_html=True)
+
+        if not found:
+            st.markdown('<div class="muted">No risk-increasing driver available.</div>', unsafe_allow_html=True)
+
         st.markdown("</div>", unsafe_allow_html=True)
 
     with e2:
@@ -222,56 +363,40 @@ def render_explanation_block(sk_id):
             """,
             unsafe_allow_html=True,
         )
+
+        found = False
         for col in ["top_1_support_driver", "top_2_support_driver", "top_3_support_driver"]:
             val = explain_row.get(col, None)
             if pd.notna(val) and val is not None:
+                found = True
                 st.markdown(f'<span class="pill">{val}</span>', unsafe_allow_html=True)
+
+        if not found:
+            st.markdown('<div class="muted">No risk-reducing driver available.</div>', unsafe_allow_html=True)
+
         st.markdown("</div>", unsafe_allow_html=True)
 
 
-def render_ecl_metrics(sk_id):
-    if portfolio_ecl.empty:
-        return
-
-    borrower_ecl_row = portfolio_ecl[portfolio_ecl["SK_ID_CURR"] == sk_id]
-
-    if borrower_ecl_row.empty:
-        return
-
-    borrower_ecl_row = borrower_ecl_row.iloc[0]
-
-    st.markdown("### Expected Loss View")
-
-    e1, e2, e3 = st.columns(3)
-    e1.metric("Loss Severity Assumption", format_pct(borrower_ecl_row.get("LGD"), 1))
-    e2.metric("Credit Exposure", format_currency(borrower_ecl_row.get("EAD")))
-    e3.metric("Base Expected Loss", format_currency(borrower_ecl_row.get("ECL_base")))
-
-    st.caption(
-        "Expected loss is calculated as Estimated Default Risk × Loss Severity Assumption × Credit Exposure."
-    )
-
-
-def render_result_summary(raw_pd, calibrated_pd, credit_grade, decision, grade_group, actual_default=None):
+def render_baseline_result(raw_pd, calibrated_pd, credit_grade, decision, grade_group, actual_default=None):
     m1, m2, m3, m4, m5 = st.columns(5)
 
     m1.metric("Model Risk Score", f"{raw_pd:.4f}")
-    m2.metric("Estimated Default Risk", f"{calibrated_pd:.4f}")
+    m2.metric("Estimated Default Risk", f"{calibrated_pd:.2%}")
     m3.metric("Credit Grade", credit_grade)
     m4.metric("Recommendation", decision)
     m5.metric("Risk Segment", grade_group)
 
     observed_text = ""
     if actual_default is not None:
-        observed_text = f"<br><br>Observed outcome in test data: <b>{actual_default}</b>."
+        observed_text = f"<br><br>Observed outcome in test data: <b>{'Repayment difficulty' if int(actual_default) == 1 else 'No repayment difficulty'}</b>."
 
     st.markdown(
         f"""
         <div class="footnote-box">
             <b>How to read the result:</b><br>
-            The system estimates the borrower's probability of repayment difficulty and converts it into a
-            credit grade. This borrower is assigned to <b>{credit_grade}</b>, categorized as
-            <b>{grade_group}</b>, with a recommended action of <b>{decision}</b>.
+            The system estimates this borrower's probability of repayment difficulty and maps it into a credit grade.
+            This borrower is assigned to <b>{credit_grade}</b>, categorized as <b>{grade_group}</b>,
+            with a recommended action of <b>{decision}</b>.
             {observed_text}
         </div>
         """,
@@ -279,314 +404,204 @@ def render_result_summary(raw_pd, calibrated_pd, credit_grade, decision, grade_g
     )
 
 
-if mode == "Existing Borrower":
-    st.markdown("### Existing Borrower Assessment")
-    st.caption("Select a borrower from the existing portfolio and review the system-generated rating.")
+# ============================================================
+# Main borrower selector
+# ============================================================
 
-    borrower_options = borrower_profile_ui["SK_ID_CURR"].tolist()
-    selected_borrower = st.selectbox("Select borrower ID", borrower_options)
+borrower_options = borrower_profile_ui["SK_ID_CURR"].tolist()
 
-    borrower_row_full = data["app_static"][
-        data["app_static"]["SK_ID_CURR"] == selected_borrower
-    ].copy()
+selected_borrower = st.selectbox(
+    "Select borrower ID",
+    borrower_options,
+    help="Choose an existing borrower from the portfolio.",
+)
 
-    borrower_profile_row = borrower_profile_ui[
-        borrower_profile_ui["SK_ID_CURR"] == selected_borrower
-    ].copy()
+borrower_profile_row = borrower_profile_ui[
+    borrower_profile_ui["SK_ID_CURR"] == selected_borrower
+].copy()
 
-    if borrower_profile_row.empty:
-        st.error("Borrower profile not found.")
-        st.stop()
+if borrower_profile_row.empty:
+    st.error("Borrower profile not found.")
+    st.stop()
 
-    borrower_profile_row = borrower_profile_row.iloc[0]
+borrower_profile_row = borrower_profile_row.iloc[0]
 
-    static_raw = borrower_row_full.drop(
-        columns=[c for c in ["SK_ID_CURR", "TARGET"] if c in borrower_row_full.columns]
+raw_pd, base_pd, attn = get_existing_borrower_score(selected_borrower)
+
+base_grade = assign_credit_grade_from_summary(base_pd, grade_summary)
+base_decision = assign_decision_from_grade(base_grade)
+base_group = assign_grade_group(base_grade)
+
+borrower_rank_row = risk_table[risk_table["SK_ID_CURR"] == selected_borrower]
+actual_default = (
+    borrower_rank_row["actual_default"].iloc[0]
+    if not borrower_rank_row.empty and "actual_default" in borrower_rank_row.columns
+    else None
+)
+
+st.markdown("### Baseline Borrower Rating")
+
+render_baseline_result(
+    raw_pd=raw_pd,
+    calibrated_pd=base_pd,
+    credit_grade=base_grade,
+    decision=base_decision,
+    grade_group=base_group,
+    actual_default=actual_default,
+)
+
+st.markdown("### Borrower Profile")
+render_profile_card(borrower_profile_row)
+
+render_explanation_block(selected_borrower)
+
+
+# ============================================================
+# Borrower stress scenario
+# ============================================================
+
+st.markdown("### Borrower Stress Scenario")
+
+st.markdown(
+    """
+    <div class="warning-box">
+        <b>Scenario logic:</b><br>
+        This is not a new-borrower application form. The scenario starts from the selected existing borrower
+        and applies stress assumptions such as income decline, higher exposure, unstable employment, or worse repayment behavior.
+        It is designed for what-if analysis and decision support.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+with st.form("borrower_stress_form"):
+    s1, s2 = st.columns(2)
+
+    income_decline_pct = s1.slider(
+        "Income decline",
+        min_value=0,
+        max_value=80,
+        value=20,
+        step=5,
+        format="%d%%",
+        help="Assumed decline in borrower income under stress.",
     )
 
-    static_processed = preprocess_static_row(static_raw, data)
-
-    seq, mask = build_existing_borrower_sequence(selected_borrower, data)
-    embedding, attn = get_tcn_embedding(encoder, seq, mask)
-
-    raw_pd, calibrated_pd = score_borrower(
-        static_processed,
-        embedding,
-        xgb_model,
-        platt,
-        data["emb_cols_v2"],
+    exposure_increase_pct = s2.slider(
+        "Credit exposure increase",
+        min_value=0,
+        max_value=100,
+        value=10,
+        step=5,
+        format="%d%%",
+        help="Assumed increase in exposure or utilization under stress.",
     )
 
-    credit_grade = assign_credit_grade_from_summary(calibrated_pd, grade_summary)
-    decision = assign_decision_from_grade(credit_grade)
-    grade_group = assign_grade_group(credit_grade)
-
-    borrower_rank_row = risk_table[risk_table["SK_ID_CURR"] == selected_borrower]
-    actual_default = (
-        borrower_rank_row["actual_default"].iloc[0]
-        if not borrower_rank_row.empty and "actual_default" in borrower_rank_row.columns
-        else None
+    employment_stress = s1.selectbox(
+        "Employment condition",
+        [
+            "No change",
+            "Mild instability",
+            "Job transition / unstable income",
+            "Unemployed / income interruption",
+        ],
+        index=1,
     )
 
-    render_result_summary(
-        raw_pd=raw_pd,
-        calibrated_pd=calibrated_pd,
-        credit_grade=credit_grade,
-        decision=decision,
-        grade_group=grade_group,
-        actual_default=actual_default,
+    repayment_stress = s2.selectbox(
+        "Repayment behavior scenario",
+        [
+            "No change",
+            "Mild deterioration",
+            "Repeated late payments",
+            "Severe delinquency",
+        ],
+        index=1,
     )
 
-    render_ecl_metrics(selected_borrower)
+    submitted = st.form_submit_button("Apply stress scenario")
 
-    st.markdown("### Borrower Profile")
-    render_profile_card(borrower_profile_row)
-
-    render_explanation_block(selected_borrower)
-
-    with st.expander("Technical detail: model attention over repayment history"):
-        st.caption(
-            "This table is mainly for technical review. Higher attention weight means the model focused more on that monthly history step."
-        )
-        attn_df = pd.DataFrame(
-            {
-                "History Step": list(range(1, len(attn) + 1)),
-                "Model Attention Weight": attn,
-            }
-        )
-        st.dataframe(attn_df, use_container_width=True, hide_index=True)
-
-else:
-    st.markdown("### Manual Borrower Simulation")
-    st.caption(
-        "Modify a borrower profile using business-friendly inputs and test how the credit rating engine responds."
+if submitted:
+    stressed_pd, pd_multiplier = apply_borrower_stress(
+        base_pd=base_pd,
+        income_decline_pct=income_decline_pct,
+        exposure_increase_pct=exposure_increase_pct,
+        employment_stress=employment_stress,
+        repayment_stress=repayment_stress,
     )
 
-    app_static = data["app_static"].copy()
-    template_id = st.selectbox("Choose a base borrower template", app_static["SK_ID_CURR"].tolist())
+    stressed_grade = assign_credit_grade_from_summary(stressed_pd, grade_summary)
+    stressed_decision = assign_decision_from_grade(stressed_grade)
+    stressed_group = assign_grade_group(stressed_grade)
 
-    template_row = app_static[app_static["SK_ID_CURR"] == template_id].copy().iloc[[0]]
-    edited_row = template_row.copy()
+    base_lgd = lgd_by_grade(base_grade)
+    stressed_lgd = lgd_by_grade(stressed_grade)
+
+    if not portfolio_ecl.empty:
+        borrower_ecl_row = portfolio_ecl[portfolio_ecl["SK_ID_CURR"] == selected_borrower]
+
+        if not borrower_ecl_row.empty:
+            borrower_ecl_row = borrower_ecl_row.iloc[0]
+            base_ead = float(borrower_ecl_row.get("EAD", borrower_profile_row.get("AMT_CREDIT", 0)))
+        else:
+            base_ead = float(borrower_profile_row.get("AMT_CREDIT", 0))
+    else:
+        base_ead = float(borrower_profile_row.get("AMT_CREDIT", 0))
+
+    stressed_ead = base_ead * (1 + exposure_increase_pct / 100)
+
+    base_ecl = base_pd * base_lgd * base_ead
+    stressed_ecl = stressed_pd * stressed_lgd * stressed_ead
+    ecl_change = stressed_ecl - base_ecl
+    ecl_change_pct = ecl_change / base_ecl if base_ecl > 0 else 0
+
+    st.markdown("### Stress Scenario Result")
+
+    r1, r2, r3, r4 = st.columns(4)
+
+    r1.metric(
+        "Estimated Default Risk",
+        f"{stressed_pd:.2%}",
+        delta=f"{(stressed_pd - base_pd):.2%}",
+    )
+    r2.metric("Credit Grade", stressed_grade, delta=f"{base_grade} → {stressed_grade}")
+    r3.metric("Recommendation", stressed_decision, delta=f"{base_decision} → {stressed_decision}")
+    r4.metric("Risk Multiplier", f"{pd_multiplier:.2f}x")
+
+    st.markdown("### Expected Loss Impact")
+
+    e1, e2, e3, e4 = st.columns(4)
+
+    e1.metric("Baseline Expected Loss", format_currency(base_ecl))
+    e2.metric("Stressed Expected Loss", format_currency(stressed_ecl))
+    e3.metric("Expected Loss Increase", format_currency(ecl_change))
+    e4.metric("Expected Loss Increase %", format_pct(ecl_change_pct, 1))
+
+    st.markdown("### Scenario Interpretation")
 
     st.markdown(
-        """
+        f"""
         <div class="footnote-box">
-            Manual simulation starts from an existing borrower template to preserve hidden model features.
-            You can adjust the most important business fields below. The system then recalculates the risk score
-            using the edited profile.
+            Under the selected stress scenario, the borrower's estimated default risk changes from
+            <b>{base_pd:.2%}</b> to <b>{stressed_pd:.2%}</b>.
+            The credit grade migrates from <b>{base_grade}</b> to <b>{stressed_grade}</b>,
+            and the recommended action changes from <b>{base_decision}</b> to <b>{stressed_decision}</b>.
+            <br><br>
+            The expected loss changes from <b>{base_ecl:,.0f}</b> to <b>{stressed_ecl:,.0f}</b>.
+            This scenario is a decision-support simulation, not a retrained model prediction.
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    with st.form("manual_form"):
-        st.markdown("#### Financial Information")
-
-        f1, f2 = st.columns(2)
-
-        income = f1.number_input(
-            "Income amount",
-            min_value=0.0,
-            value=float(template_row.iloc[0].get("AMT_INCOME_TOTAL", 0) or 0),
-            step=1000.0,
-        )
-
-        credit_amount = f2.number_input(
-            "Requested credit amount",
-            min_value=0.0,
-            value=float(template_row.iloc[0].get("AMT_CREDIT", 0) or 0),
-            step=1000.0,
-        )
-
-        annuity = f1.number_input(
-            "Regular payment amount",
-            min_value=0.0,
-            value=float(template_row.iloc[0].get("AMT_ANNUITY", 0) or 0),
-            step=100.0,
-        )
-
-        goods_price = f2.number_input(
-            "Goods price",
-            min_value=0.0,
-            value=float(template_row.iloc[0].get("AMT_GOODS_PRICE", 0) or 0),
-            step=1000.0,
-        )
-
-        st.markdown("#### Personal and Employment Profile")
-
-        p1, p2 = st.columns(2)
-
-        current_age = years_from_negative_days(template_row.iloc[0].get("DAYS_BIRTH"))
-        if current_age is None:
-            current_age = 35.0
-
-        age_years = p1.number_input(
-            "Age",
-            min_value=18.0,
-            max_value=80.0,
-            value=float(round(current_age, 1)),
-            step=1.0,
-        )
-
-        current_employment = years_from_negative_days(template_row.iloc[0].get("DAYS_EMPLOYED"))
-        if current_employment is None or current_employment > 60:
-            current_employment = 5.0
-
-        employment_years = p2.number_input(
-            "Employment length",
-            min_value=0.0,
-            max_value=50.0,
-            value=float(round(current_employment, 1)),
-            step=0.5,
-        )
-
-        children = p1.number_input(
-            "Number of children",
-            min_value=0,
-            max_value=10,
-            value=int(template_row.iloc[0].get("CNT_CHILDREN", 0) or 0),
-            step=1,
-        )
-
-        st.markdown("#### Categorical Profile")
-
-        c1, c2 = st.columns(2)
-
-        def safe_options(col, fallback):
-            if col in app_static.columns:
-                vals = sorted(app_static[col].dropna().astype(str).unique().tolist())
-                return vals if vals else fallback
-            return fallback
-
-        def option_index(options, value):
-            value = str(value)
-            return options.index(value) if value in options else 0
-
-        gender_options = safe_options("CODE_GENDER", ["F", "M"])
-        income_type_options = safe_options("NAME_INCOME_TYPE", ["Working", "Commercial associate", "Pensioner"])
-        education_options = safe_options("NAME_EDUCATION_TYPE", ["Secondary / secondary special", "Higher education"])
-        family_options = safe_options("NAME_FAMILY_STATUS", ["Single / not married", "Married", "Civil marriage"])
-
-        gender = c1.selectbox(
-            "Gender",
-            options=gender_options,
-            index=option_index(gender_options, template_row.iloc[0].get("CODE_GENDER")),
-        )
-
-        income_type = c2.selectbox(
-            "Income type",
-            options=income_type_options,
-            index=option_index(income_type_options, template_row.iloc[0].get("NAME_INCOME_TYPE")),
-        )
-
-        education_type = c1.selectbox(
-            "Education level",
-            options=education_options,
-            index=option_index(education_options, template_row.iloc[0].get("NAME_EDUCATION_TYPE")),
-        )
-
-        family_status = c2.selectbox(
-            "Family status",
-            options=family_options,
-            index=option_index(family_options, template_row.iloc[0].get("NAME_FAMILY_STATUS")),
-        )
-
-        owns_car = c1.selectbox(
-            "Owns a car",
-            options=["Yes", "No"],
-            index=0 if str(template_row.iloc[0].get("FLAG_OWN_CAR", "N")).upper() == "Y" else 1,
-        )
-
-        owns_realty = c2.selectbox(
-            "Owns property",
-            options=["Yes", "No"],
-            index=0 if str(template_row.iloc[0].get("FLAG_OWN_REALTY", "N")).upper() == "Y" else 1,
-        )
-
-        temporal_preset = st.selectbox(
-            "Repayment history pattern",
-            [
-                "Stable payer",
-                "Mild deterioration",
-                "High delinquency",
-                "Recovering borrower",
-            ],
-        )
-
-        submitted = st.form_submit_button("Score borrower")
-
-    if submitted:
-        editable_updates = {
-            "AMT_INCOME_TOTAL": income,
-            "AMT_CREDIT": credit_amount,
-            "AMT_ANNUITY": annuity,
-            "AMT_GOODS_PRICE": goods_price,
-            "CNT_CHILDREN": children,
-            "DAYS_BIRTH": negative_days_from_years(age_years),
-            "DAYS_EMPLOYED": negative_days_from_years(employment_years),
-            "CODE_GENDER": gender,
-            "NAME_INCOME_TYPE": income_type,
-            "NAME_EDUCATION_TYPE": education_type,
-            "NAME_FAMILY_STATUS": family_status,
-            "FLAG_OWN_CAR": yes_no_to_flag(owns_car),
-            "FLAG_OWN_REALTY": yes_no_to_flag(owns_realty),
+with st.expander("Technical detail: model attention over repayment history"):
+    st.caption(
+        "This table is mainly for technical review. Higher attention weight means the model focused more on that monthly history step."
+    )
+    attn_df = pd.DataFrame(
+        {
+            "History Step": list(range(1, len(attn) + 1)),
+            "Model Attention Weight": attn,
         }
-
-        for col, val in editable_updates.items():
-            if col in edited_row.columns:
-                edited_row.at[edited_row.index[0], col] = val
-
-        static_raw = edited_row.drop(
-            columns=[c for c in ["SK_ID_CURR", "TARGET"] if c in edited_row.columns]
-        )
-
-        static_processed = preprocess_static_row(static_raw, data)
-        seq, mask = build_temporal_preset(data, temporal_preset)
-        embedding, _ = get_tcn_embedding(encoder, seq, mask)
-
-        raw_pd, calibrated_pd = score_borrower(
-            static_processed,
-            embedding,
-            xgb_model,
-            platt,
-            data["emb_cols_v2"],
-        )
-
-        credit_grade = assign_credit_grade_from_summary(calibrated_pd, grade_summary)
-        decision = assign_decision_from_grade(credit_grade)
-        grade_group = assign_grade_group(credit_grade)
-
-        render_result_summary(
-            raw_pd=raw_pd,
-            calibrated_pd=calibrated_pd,
-            credit_grade=credit_grade,
-            decision=decision,
-            grade_group=grade_group,
-        )
-
-        lgd = {
-            "AAA": 0.25,
-            "AA": 0.25,
-            "A": 0.25,
-            "BBB": 0.40,
-            "BB": 0.40,
-            "B": 0.55,
-            "CCC": 0.55,
-            "CC": 0.70,
-            "D": 0.70,
-        }.get(credit_grade, 0.55)
-
-        ead = credit_amount
-        ecl = calibrated_pd * lgd * ead
-
-        st.markdown("### Expected Loss View")
-        el1, el2, el3 = st.columns(3)
-        el1.metric("Loss Severity Assumption", format_pct(lgd, 1))
-        el2.metric("Credit Exposure", format_currency(ead))
-        el3.metric("Base Expected Loss", format_currency(ecl))
-
-        with st.expander("Technical detail: edited model input"):
-            display_updates = pd.DataFrame(
-                [{"Field": k, "Internal Model Value": v} for k, v in editable_updates.items()]
-            )
-            st.dataframe(display_updates, use_container_width=True, hide_index=True)
+    )
+    st.dataframe(attn_df, use_container_width=True, hide_index=True)

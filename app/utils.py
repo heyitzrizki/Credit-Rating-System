@@ -373,29 +373,31 @@ def score_borrower(static_processed, embedding, xgb_model, platt, emb_cols):
     return raw_pd, calibrated_pd
 
 
-def assign_credit_grade_from_summary(pd_value: float, grade_summary: pd.DataFrame) -> str:
-    grade_summary = grade_summary.copy()
+ddef assign_credit_grade_from_summary(pd_value: float, grade_summary: pd.DataFrame = None) -> str:
+    """
+    Assign credit grade using a fixed business-friendly PD scale.
 
-    if {"min_pd", "max_pd", "credit_grade"}.issubset(grade_summary.columns):
-        for _, row in grade_summary.iterrows():
-            if row["min_pd"] <= pd_value <= row["max_pd"]:
-                return str(row["credit_grade"])
+    This rule is intentionally independent from empirical grade buckets so that
+    manual simulation remains interpretable for non-technical users.
+    """
+    if pd.isna(pd_value):
+        return "Unrated"
 
-    if pd_value <= 0.01:
+    if pd_value <= 0.005:
         return "AAA"
-    if pd_value <= 0.02:
+    if pd_value <= 0.010:
         return "AA"
-    if pd_value <= 0.04:
+    if pd_value <= 0.020:
         return "A"
-    if pd_value <= 0.07:
+    if pd_value <= 0.040:
         return "BBB"
-    if pd_value <= 0.10:
+    if pd_value <= 0.070:
         return "BB"
-    if pd_value <= 0.15:
+    if pd_value <= 0.100:
         return "B"
-    if pd_value <= 0.25:
+    if pd_value <= 0.150:
         return "CCC"
-    if pd_value <= 0.40:
+    if pd_value <= 0.250:
         return "CC"
     return "D"
 
