@@ -16,6 +16,10 @@ PROJECT_ROOT = APP_DIR.parent
 ARTIFACT_DIR = PROJECT_ROOT / "artifacts"
 
 
+# ============================================================
+# TCN Encoder Architecture
+# ============================================================
+
 class Chomp1d(nn.Module):
     def __init__(self, chomp_size: int):
         super().__init__()
@@ -143,6 +147,10 @@ class TCNEncoder(nn.Module):
         return embedding, attn_weights, h
 
 
+# ============================================================
+# Artifact Loading
+# ============================================================
+
 def read_optional_csv(filename: str) -> pd.DataFrame:
     path = ARTIFACT_DIR / filename
     return pd.read_csv(path) if path.exists() else pd.DataFrame()
@@ -182,16 +190,21 @@ def load_data_objects():
         "executive_summary": pd.read_csv(ARTIFACT_DIR / "executive_summary.csv"),
         "grade_group_summary": pd.read_csv(ARTIFACT_DIR / "grade_group_summary.csv"),
         "borrower_profile_ui": pd.read_csv(ARTIFACT_DIR / "borrower_profile_ui.csv"),
+
+        # ECL and macro stress testing artifacts
         "portfolio_ecl_base": read_optional_csv("portfolio_ecl_base.csv"),
         "ecl_grade_summary": read_optional_csv("ecl_grade_summary.csv"),
         "macro_stress_summary": read_optional_csv("macro_stress_summary.csv"),
         "portfolio_ecl_severe_downturn": read_optional_csv("portfolio_ecl_severe_downturn.csv"),
+
+        # Model preprocessing artifacts
         "selected_static_features": joblib.load(ARTIFACT_DIR / "selected_static_features.joblib"),
         "static_feature_columns": joblib.load(ARTIFACT_DIR / "static_feature_columns.joblib"),
         "num_impute_values": joblib.load(ARTIFACT_DIR / "num_impute_values.joblib"),
         "cat_impute_values": joblib.load(ARTIFACT_DIR / "cat_impute_values.joblib"),
         "temporal_feature_cols_v2": joblib.load(ARTIFACT_DIR / "temporal_feature_cols_v2.joblib"),
         "emb_cols_v2": joblib.load(ARTIFACT_DIR / "embedding_cols_v2.joblib"),
+
         "metadata": metadata,
     }
 
@@ -207,6 +220,10 @@ def load_data_objects():
 
     return data
 
+
+# ============================================================
+# Formatting Helpers
+# ============================================================
 
 def format_pct(x, decimals: int = 1) -> str:
     if pd.isna(x):
@@ -231,6 +248,10 @@ def format_number(x, decimals: int = 0) -> str:
         return "-"
     return f"{x:,.{decimals}f}"
 
+
+# ============================================================
+# Feature Preprocessing and Scoring
+# ============================================================
 
 def sanitize_feature_names(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
@@ -298,6 +319,10 @@ def build_existing_borrower_sequence(sk_id: int, data_dict: dict):
 
 
 def build_temporal_preset(data_dict: dict, preset_name: str):
+    """
+    Kept for backward compatibility with earlier dashboard versions.
+    The current borrower page uses borrower-level stress scenario instead of manual temporal presets.
+    """
     seq_panel = data_dict["seq_panel"]
     temporal_cols = data_dict["temporal_feature_cols_v2"]
 
@@ -373,12 +398,16 @@ def score_borrower(static_processed, embedding, xgb_model, platt, emb_cols):
     return raw_pd, calibrated_pd
 
 
+# ============================================================
+# Rating, Decisioning, and Loss Assumptions
+# ============================================================
+
 def assign_credit_grade_from_summary(pd_value: float, grade_summary: pd.DataFrame = None) -> str:
     """
     Assign credit grade using a fixed business-friendly PD scale.
 
     This rule is intentionally independent from empirical grade buckets so that
-    manual simulation remains interpretable for non-technical users.
+    borrower-level scenario analysis remains interpretable for non-technical users.
     """
     if pd.isna(pd_value):
         return "Unrated"
@@ -428,9 +457,15 @@ def lgd_from_grade(grade: str) -> float:
         "B": 0.55,
         "CCC": 0.55,
         "CC": 0.70,
+        "C": 0.70,
         "D": 0.70,
     }
     return lgd_map.get(str(grade), np.nan)
+
+
+# ============================================================
+# Business-Friendly Feature Labels
+# ============================================================
 
 def humanize_feature_name(feature_name: str) -> str:
     """
@@ -450,6 +485,7 @@ def humanize_feature_name(feature_name: str) -> str:
         "DAYS_EMPLOYED": "Employment length",
         "DAYS_REGISTRATION": "Time since registration",
         "DAYS_ID_PUBLISH": "Time since ID document update",
+        "DAYS_LAST_PHONE_CHANGE": "Time since phone number change",
         "AMT_INCOME_TOTAL": "Income amount",
         "AMT_CREDIT": "Credit amount",
         "AMT_ANNUITY": "Regular payment amount",
@@ -468,9 +504,8 @@ def humanize_feature_name(feature_name: str) -> str:
         "ORGANIZATION_TYPE": "Employer organization type",
         "REGION_RATING_CLIENT": "Region risk rating",
         "REGION_RATING_CLIENT_W_CITY": "Region risk rating with city",
-        "DAYS_LAST_PHONE_CHANGE": "Time since phone number change",
 
-        # Bureau / previous credit style variables
+        # Bureau / previous credit variables
         "AMT_CREDIT_SUM": "Total previous credit amount",
         "AMT_CREDIT_SUM_DEBT": "Outstanding debt from previous credit",
         "AMT_CREDIT_SUM_LIMIT": "Previous credit limit",
@@ -508,7 +543,6 @@ def humanize_feature_name(feature_name: str) -> str:
     if name in feature_map:
         return feature_map[name]
 
-    # Handle one-hot encoded categorical variables
     categorical_prefixes = {
         "NAME_INCOME_TYPE_": "Income type",
         "NAME_EDUCATION_TYPE_": "Education level",
@@ -527,7 +561,6 @@ def humanize_feature_name(feature_name: str) -> str:
             value = name.replace(prefix, "").replace("_", " ")
             return f"{label}: {value}"
 
-    # Handle common suffixes
     cleaned = name.replace("_is_missing", " missing")
     cleaned = cleaned.replace("_", " ").strip()
     return cleaned.title()

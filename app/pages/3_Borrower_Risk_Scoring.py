@@ -9,7 +9,6 @@ from utils import (
     format_currency,
     format_pct,
     get_tcn_embedding,
-    humanize_feature_name,
     load_data_objects,
     load_models,
     preprocess_static_row,
@@ -118,6 +117,106 @@ def flag_to_yes_no(value):
     return "Yes" if str(value).upper() == "Y" else "No"
 
 
+def humanize_feature_name(feature_name: str) -> str:
+    """
+    Convert raw Home Credit / engineered feature names into business-friendly labels.
+    Local fallback to avoid deployment import-cache issues.
+    """
+    if pd.isna(feature_name):
+        return "-"
+
+    name = str(feature_name)
+
+    feature_map = {
+        # Core Home Credit application variables
+        "EXT_SOURCE_1": "External credit score 1",
+        "EXT_SOURCE_2": "External credit score 2",
+        "EXT_SOURCE_3": "External credit score 3",
+        "DAYS_BIRTH": "Borrower age",
+        "DAYS_EMPLOYED": "Employment length",
+        "DAYS_REGISTRATION": "Time since registration",
+        "DAYS_ID_PUBLISH": "Time since ID document update",
+        "DAYS_LAST_PHONE_CHANGE": "Time since phone number change",
+        "AMT_INCOME_TOTAL": "Income amount",
+        "AMT_CREDIT": "Credit amount",
+        "AMT_ANNUITY": "Regular payment amount",
+        "AMT_GOODS_PRICE": "Goods price",
+        "CNT_CHILDREN": "Number of children",
+        "CNT_FAM_MEMBERS": "Family size",
+        "CODE_GENDER": "Gender",
+        "FLAG_OWN_CAR": "Car ownership",
+        "FLAG_OWN_REALTY": "Property ownership",
+        "NAME_INCOME_TYPE": "Income type",
+        "NAME_EDUCATION_TYPE": "Education level",
+        "NAME_FAMILY_STATUS": "Family status",
+        "NAME_HOUSING_TYPE": "Housing type",
+        "NAME_CONTRACT_TYPE": "Loan contract type",
+        "OCCUPATION_TYPE": "Occupation type",
+        "ORGANIZATION_TYPE": "Employer organization type",
+        "REGION_RATING_CLIENT": "Region risk rating",
+        "REGION_RATING_CLIENT_W_CITY": "Region risk rating with city",
+
+        # Bureau / previous credit variables
+        "AMT_CREDIT_SUM": "Total previous credit amount",
+        "AMT_CREDIT_SUM_DEBT": "Outstanding debt from previous credit",
+        "AMT_CREDIT_SUM_LIMIT": "Previous credit limit",
+        "AMT_CREDIT_SUM_OVERDUE": "Overdue amount from previous credit",
+        "CREDIT_DAY_OVERDUE": "Days overdue on previous credit",
+        "DAYS_CREDIT": "Time since previous credit application",
+        "DAYS_CREDIT_ENDDATE": "Remaining time to previous credit end date",
+        "DAYS_ENDDATE_FACT": "Actual previous credit closing time",
+        "CNT_CREDIT_PROLONG": "Number of previous credit prolongations",
+
+        # Engineered temporal features
+        "inst_late_rate": "Late repayment pattern",
+        "inst_underpay_rate": "Underpayment pattern",
+        "inst_payment_ratio_mean": "Average repayment completion ratio",
+        "inst_payment_delay_mean": "Average repayment delay",
+        "pos_dpd_max": "Maximum POS loan delinquency",
+        "pos_dpd_mean": "Average POS loan delinquency",
+        "cc_dpd_max": "Maximum credit card delinquency",
+        "cc_dpd_mean": "Average credit card delinquency",
+        "cc_balance_mean": "Average credit card balance",
+        "cc_drawings_mean": "Average credit card usage",
+        "cc_payment_ratio_mean": "Average credit card repayment ratio",
+        "bureau_any_delinquent": "Previous credit delinquency flag",
+        "bureau_debt_ratio": "Previous credit debt burden",
+        "bureau_active_credit_count": "Number of active previous credits",
+
+        # Missing indicators
+        "EXT_SOURCE_1_is_missing": "Missing external credit score 1",
+        "EXT_SOURCE_2_is_missing": "Missing external credit score 2",
+        "EXT_SOURCE_3_is_missing": "Missing external credit score 3",
+        "AMT_ANNUITY_is_missing": "Missing regular payment amount",
+        "DAYS_EMPLOYED_is_missing": "Missing employment history",
+    }
+
+    if name in feature_map:
+        return feature_map[name]
+
+    categorical_prefixes = {
+        "NAME_INCOME_TYPE_": "Income type",
+        "NAME_EDUCATION_TYPE_": "Education level",
+        "NAME_FAMILY_STATUS_": "Family status",
+        "NAME_HOUSING_TYPE_": "Housing type",
+        "NAME_CONTRACT_TYPE_": "Loan contract type",
+        "OCCUPATION_TYPE_": "Occupation type",
+        "ORGANIZATION_TYPE_": "Employer organization type",
+        "CODE_GENDER_": "Gender",
+        "FLAG_OWN_CAR_": "Car ownership",
+        "FLAG_OWN_REALTY_": "Property ownership",
+    }
+
+    for prefix, label in categorical_prefixes.items():
+        if name.startswith(prefix):
+            value = name.replace(prefix, "").replace("_", " ")
+            return f"{label}: {value}"
+
+    cleaned = name.replace("_is_missing", " missing")
+    cleaned = cleaned.replace("_", " ").strip()
+    return cleaned.title()
+
+
 def lgd_by_grade(grade: str) -> float:
     mapping = {
         "AAA": 0.25,
@@ -148,10 +247,7 @@ def apply_borrower_stress(
     """
     multiplier = 1.0
 
-    # Income stress: higher income decline increases repayment pressure
     multiplier *= 1 + (income_decline_pct / 100) * 1.20
-
-    # Exposure stress: higher exposure relative to baseline increases risk pressure
     multiplier *= 1 + (exposure_increase_pct / 100) * 0.80
 
     employment_multiplier = {
@@ -348,10 +444,16 @@ def render_explanation_block(sk_id):
             val = explain_row.get(col, None)
             if pd.notna(val) and val is not None:
                 found = True
-                st.markdown(f'<span class="pill">{humanize_feature_name(val)}</span>', unsafe_allow_html=True)
+                st.markdown(
+                    f'<span class="pill">{humanize_feature_name(val)}</span>',
+                    unsafe_allow_html=True,
+                )
 
         if not found:
-            st.markdown('<div class="muted">No risk-increasing driver available.</div>', unsafe_allow_html=True)
+            st.markdown(
+                '<div class="muted">No risk-increasing driver available.</div>',
+                unsafe_allow_html=True,
+            )
 
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -370,10 +472,16 @@ def render_explanation_block(sk_id):
             val = explain_row.get(col, None)
             if pd.notna(val) and val is not None:
                 found = True
-                st.markdown(f'<span class="pill">{humanize_feature_name(val)}</span>', unsafe_allow_html=True)
+                st.markdown(
+                    f'<span class="pill">{humanize_feature_name(val)}</span>',
+                    unsafe_allow_html=True,
+                )
 
         if not found:
-            st.markdown('<div class="muted">No risk-reducing driver available.</div>', unsafe_allow_html=True)
+            st.markdown(
+                '<div class="muted">No risk-reducing driver available.</div>',
+                unsafe_allow_html=True,
+            )
 
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -389,7 +497,10 @@ def render_baseline_result(raw_pd, calibrated_pd, credit_grade, decision, grade_
 
     observed_text = ""
     if actual_default is not None:
-        observed_text = f"<br><br>Observed outcome in test data: <b>{'Repayment difficulty' if int(actual_default) == 1 else 'No repayment difficulty'}</b>."
+        observed_text = (
+            "<br><br>Observed outcome in test data: "
+            f"<b>{'Repayment difficulty' if int(actual_default) == 1 else 'No repayment difficulty'}</b>."
+        )
 
     st.markdown(
         f"""
