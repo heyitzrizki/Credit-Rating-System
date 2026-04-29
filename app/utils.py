@@ -431,3 +431,103 @@ def lgd_from_grade(grade: str) -> float:
         "D": 0.70,
     }
     return lgd_map.get(str(grade), np.nan)
+
+def humanize_feature_name(feature_name: str) -> str:
+    """
+    Convert raw Home Credit / engineered feature names into business-friendly labels.
+    """
+    if pd.isna(feature_name):
+        return "-"
+
+    name = str(feature_name)
+
+    feature_map = {
+        # Core Home Credit application variables
+        "EXT_SOURCE_1": "External credit score 1",
+        "EXT_SOURCE_2": "External credit score 2",
+        "EXT_SOURCE_3": "External credit score 3",
+        "DAYS_BIRTH": "Borrower age",
+        "DAYS_EMPLOYED": "Employment length",
+        "DAYS_REGISTRATION": "Time since registration",
+        "DAYS_ID_PUBLISH": "Time since ID document update",
+        "AMT_INCOME_TOTAL": "Income amount",
+        "AMT_CREDIT": "Credit amount",
+        "AMT_ANNUITY": "Regular payment amount",
+        "AMT_GOODS_PRICE": "Goods price",
+        "CNT_CHILDREN": "Number of children",
+        "CNT_FAM_MEMBERS": "Family size",
+        "CODE_GENDER": "Gender",
+        "FLAG_OWN_CAR": "Car ownership",
+        "FLAG_OWN_REALTY": "Property ownership",
+        "NAME_INCOME_TYPE": "Income type",
+        "NAME_EDUCATION_TYPE": "Education level",
+        "NAME_FAMILY_STATUS": "Family status",
+        "NAME_HOUSING_TYPE": "Housing type",
+        "NAME_CONTRACT_TYPE": "Loan contract type",
+        "OCCUPATION_TYPE": "Occupation type",
+        "ORGANIZATION_TYPE": "Employer organization type",
+        "REGION_RATING_CLIENT": "Region risk rating",
+        "REGION_RATING_CLIENT_W_CITY": "Region risk rating with city",
+        "DAYS_LAST_PHONE_CHANGE": "Time since phone number change",
+
+        # Bureau / previous credit style variables
+        "AMT_CREDIT_SUM": "Total previous credit amount",
+        "AMT_CREDIT_SUM_DEBT": "Outstanding debt from previous credit",
+        "AMT_CREDIT_SUM_LIMIT": "Previous credit limit",
+        "AMT_CREDIT_SUM_OVERDUE": "Overdue amount from previous credit",
+        "CREDIT_DAY_OVERDUE": "Days overdue on previous credit",
+        "DAYS_CREDIT": "Time since previous credit application",
+        "DAYS_CREDIT_ENDDATE": "Remaining time to previous credit end date",
+        "DAYS_ENDDATE_FACT": "Actual previous credit closing time",
+        "CNT_CREDIT_PROLONG": "Number of previous credit prolongations",
+
+        # Engineered temporal features
+        "inst_late_rate": "Late repayment pattern",
+        "inst_underpay_rate": "Underpayment pattern",
+        "inst_payment_ratio_mean": "Average repayment completion ratio",
+        "inst_payment_delay_mean": "Average repayment delay",
+        "pos_dpd_max": "Maximum POS loan delinquency",
+        "pos_dpd_mean": "Average POS loan delinquency",
+        "cc_dpd_max": "Maximum credit card delinquency",
+        "cc_dpd_mean": "Average credit card delinquency",
+        "cc_balance_mean": "Average credit card balance",
+        "cc_drawings_mean": "Average credit card usage",
+        "cc_payment_ratio_mean": "Average credit card repayment ratio",
+        "bureau_any_delinquent": "Previous credit delinquency flag",
+        "bureau_debt_ratio": "Previous credit debt burden",
+        "bureau_active_credit_count": "Number of active previous credits",
+
+        # Missing indicators
+        "EXT_SOURCE_1_is_missing": "Missing external credit score 1",
+        "EXT_SOURCE_2_is_missing": "Missing external credit score 2",
+        "EXT_SOURCE_3_is_missing": "Missing external credit score 3",
+        "AMT_ANNUITY_is_missing": "Missing regular payment amount",
+        "DAYS_EMPLOYED_is_missing": "Missing employment history",
+    }
+
+    if name in feature_map:
+        return feature_map[name]
+
+    # Handle one-hot encoded categorical variables
+    categorical_prefixes = {
+        "NAME_INCOME_TYPE_": "Income type",
+        "NAME_EDUCATION_TYPE_": "Education level",
+        "NAME_FAMILY_STATUS_": "Family status",
+        "NAME_HOUSING_TYPE_": "Housing type",
+        "NAME_CONTRACT_TYPE_": "Loan contract type",
+        "OCCUPATION_TYPE_": "Occupation type",
+        "ORGANIZATION_TYPE_": "Employer organization type",
+        "CODE_GENDER_": "Gender",
+        "FLAG_OWN_CAR_": "Car ownership",
+        "FLAG_OWN_REALTY_": "Property ownership",
+    }
+
+    for prefix, label in categorical_prefixes.items():
+        if name.startswith(prefix):
+            value = name.replace(prefix, "").replace("_", " ")
+            return f"{label}: {value}"
+
+    # Handle common suffixes
+    cleaned = name.replace("_is_missing", " missing")
+    cleaned = cleaned.replace("_", " ").strip()
+    return cleaned.title()

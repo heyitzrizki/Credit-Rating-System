@@ -9,6 +9,7 @@ from utils import (
     format_currency,
     format_pct,
     get_tcn_embedding,
+    humanize_feature_name,
     load_data_objects,
     load_models,
     preprocess_static_row,
@@ -347,7 +348,7 @@ def render_explanation_block(sk_id):
             val = explain_row.get(col, None)
             if pd.notna(val) and val is not None:
                 found = True
-                st.markdown(f'<span class="pill">{val}</span>', unsafe_allow_html=True)
+                st.markdown(f'<span class="pill">{humanize_feature_name(val)}</span>', unsafe_allow_html=True)
 
         if not found:
             st.markdown('<div class="muted">No risk-increasing driver available.</div>', unsafe_allow_html=True)
@@ -369,7 +370,7 @@ def render_explanation_block(sk_id):
             val = explain_row.get(col, None)
             if pd.notna(val) and val is not None:
                 found = True
-                st.markdown(f'<span class="pill">{val}</span>', unsafe_allow_html=True)
+                st.markdown(f'<span class="pill">{humanize_feature_name(val)}</span>', unsafe_allow_html=True)
 
         if not found:
             st.markdown('<div class="muted">No risk-reducing driver available.</div>', unsafe_allow_html=True)

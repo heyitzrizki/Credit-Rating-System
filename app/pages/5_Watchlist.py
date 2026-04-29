@@ -94,10 +94,10 @@ st.caption(
 f1, f2, f3, f4 = st.columns(4)
 
 min_risk = f1.slider(
-    "Show borrowers with estimated default risk above",
+    "Show borrowers with estimated risk above",
     min_value=0.0,
     max_value=1.0,
-    value=0.10,
+    value=0.05,
     step=0.01,
     format="%.2f",
     help=(

@@ -66,12 +66,12 @@ st.markdown(
     <div class="hero-card">
         <div class="hero-title">📊 Credit Rating & ECL Stress Testing Engine</div>
         <div class="hero-subtitle">
-            Enterprise-style dashboard for borrower credit rating, calibrated PD, expected credit loss simulation,
+            Enterprise-style dashboard for borrower credit rating, adjusted default risk estimation, expected credit loss simulation,
             macro stress testing, portfolio monitoring, and high-risk watchlist management.
         </div>
         <div>
             <span class="mini-pill">AAA–D Credit Grade Framework</span>
-            <span class="mini-pill">Platt-Calibrated PD</span>
+            <span class="mini-pill">Adjusted Default Risk Estimate</span>
             <span class="mini-pill">PD × LGD × EAD ECL Engine</span>
             <span class="mini-pill">Macro Stress Testing</span>
             <span class="mini-pill">Decision Support System</span>
